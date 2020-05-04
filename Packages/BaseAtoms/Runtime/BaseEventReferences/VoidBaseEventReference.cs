@@ -32,10 +32,6 @@ namespace UnityAtoms.BaseAtoms
             {
                 switch (_usage)
                 {
-                    case (VoidBaseEventReferenceUsage.COLLECTION_CLEARED_EVENT): return _collection != null ? _collection.Cleared : null;
-                    case (VoidBaseEventReferenceUsage.LIST_CLEARED_EVENT): return _list != null ? _list.Cleared : null;
-                    case (VoidBaseEventReferenceUsage.COLLECTION_INSTANCER_CLEARED_EVENT): return _collectionInstancer != null ? _collectionInstancer.Cleared : null;
-                    case (VoidBaseEventReferenceUsage.LIST_INSTANCER_CLEARED_EVENT): return _listInstancer != null ? _listInstancer.Cleared : null;
                     case (VoidBaseEventReferenceUsage.EVENT_INSTANCER): return _eventInstancer != null ? _eventInstancer.Event : null;
                     case (VoidBaseEventReferenceUsage.EVENT):
                     default:
@@ -46,24 +42,9 @@ namespace UnityAtoms.BaseAtoms
             {
                 switch (_usage)
                 {
-                    case (VoidBaseEventReferenceUsage.COLLECTION_CLEARED_EVENT):
-                        {
-                            _collection.Cleared = value;
-                            break;
-                        }
                     case (VoidBaseEventReferenceUsage.LIST_CLEARED_EVENT):
                         {
                             _list.Cleared = value;
-                            break;
-                        }
-                    case (VoidBaseEventReferenceUsage.COLLECTION_INSTANCER_CLEARED_EVENT):
-                        {
-                            _collectionInstancer.Cleared = value;
-                            break;
-                        }
-                    case (VoidBaseEventReferenceUsage.LIST_INSTANCER_CLEARED_EVENT):
-                        {
-                            _listInstancer.Cleared = value;
                             break;
                         }
                     case (VoidBaseEventReferenceUsage.EVENT):
@@ -78,27 +59,9 @@ namespace UnityAtoms.BaseAtoms
         }
 
         /// <summary>
-        /// Collection used if `Usage` is set to `COLLECTION_CLEARED_EVENT`.
-        /// </summary>
-        [SerializeField]
-        private AtomCollection _collection = default(AtomCollection);
-
-        /// <summary>
         /// List used if `Usage` is set to `LIST_CLEARED_EVENT`.
         /// </summary>
         [SerializeField]
         private AtomList _list = default(AtomList);
-
-        /// <summary>
-        /// Collection Instancer used if `Usage` is set to `COLLECTION_INSTANCER_CLEARED_EVENT`.
-        /// </summary>
-        [SerializeField]
-        private AtomCollectionInstancer _collectionInstancer = default(AtomCollectionInstancer);
-
-        /// <summary>
-        /// List Instancer used if `Usage` is set to `LIST_INSTANCER_CLEARED_EVENT`.
-        /// </summary>
-        [SerializeField]
-        private AtomListInstancer _listInstancer = default(AtomListInstancer);
     }
 }

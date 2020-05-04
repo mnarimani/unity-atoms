@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace UnityAtoms
@@ -23,38 +24,59 @@ namespace UnityAtoms
         /// The Variable value as a property.
         /// </summary>
         /// <returns>Get or set the Variable's value.</returns>
-        public override T Value { get => _value; set => SetValue(value); }
-
-        /// <summary>
-        /// The initial value as a property.
-        /// </summary>
-        /// <returns>Get the Variable's initial value.</returns>
-        public virtual T InitialValue { get => _initialValue; set => _initialValue = value; }
+        public override T Value
+        {
+            get => _value;
+            set => SetValue(value);
+        }
 
         /// <summary>
         /// The value the Variable had before its value got changed last time.
         /// </summary>
         /// <value>Get the Variable's old value.</value>
-        public T OldValue { get => _oldValue; }
+        public T OldValue
+        {
+            get => _oldValue;
+        }
+
+        /// <summary>
+        /// Event that gets called when value changes. Do NOT assign runtime "Created" scriptable objects.
+        /// </summary>
+        public E1 Changed
+        {
+            get => _changed;
+            set => _changed = value;
+        }
+
+        /// <summary>
+        /// Event that gets called when value changes. Do NOT assign runtime "Created" scriptable objects.
+        /// </summary>
+        public E2 ChangedWithHistory
+        {
+            get => _changedWithHistory;
+            set => _changedWithHistory = value;
+        }
+
+        private string ChangedEventButtonLabel => _changed == null ? "Create" : "Destroy";
+        private string ChangedWithHistoryEventButtonLabel => _changedWithHistory == null ? "Create" : "Destroy";
 
         /// <summary>
         /// Changed Event triggered when the Variable value gets changed.
         /// </summary>
-        public E1 Changed;
+        [SerializeField]
+        [PropertyOrder(6)]
+        [InlineButton(nameof(CreateNestedChangedEvent), "$ChangedEventButtonLabel")]
+        private E1 _changed;
 
         /// <summary>
         /// Changed with history Event triggered when the Variable value gets changed.
         /// </summary>
-        public E2 ChangedWithHistory;
-
         [SerializeField]
+        [PropertyOrder(7)]
+        [InlineButton(nameof(CreateNestedChangedWithHistoryEvent), "$ChangedWithHistoryEventButtonLabel")]
+        private E2 _changedWithHistory;
+
         private T _oldValue;
-
-        /// <summary>
-        /// The inital value of the Variable.
-        /// </summary>
-        [SerializeField]
-        private T _initialValue = default(T);
 
         /// <summary>
         /// When setting the value of a Variable the new value will be piped through all the pre change transformers, which allows you to create custom logic and restriction on for example what values can be set for this Variable.
@@ -77,40 +99,14 @@ namespace UnityAtoms
         }
 
         [SerializeField]
+        [PropertyOrder(8)]
         private List<F> _preChangeTransformers = new List<F>();
 
         protected abstract bool ValueEquals(T other);
 
         private void OnValidate()
         {
-            InitialValue = RunPreChangeTransformers(InitialValue);
             _value = RunPreChangeTransformers(_value);
-        }
-
-        private void OnEnable()
-        {
-            _oldValue = InitialValue;
-            _value = InitialValue;
-
-            if (Changed == null) return;
-            Changed.Raise(Value);
-        }
-
-        /// <summary>
-        /// Reset the Variable to its `_initialValue`.
-        /// </summary>
-        /// <param name="shouldTriggerEvents">Set to `true` if Events should be triggered on reset, otherwise `false`.</param>
-        public override void Reset(bool shouldTriggerEvents = false)
-        {
-            if (!shouldTriggerEvents)
-            {
-                _oldValue = _value;
-                _value = InitialValue;
-            }
-            else
-            {
-                SetValue(InitialValue);
-            }
         }
 
         /// <summary>
@@ -124,17 +120,23 @@ namespace UnityAtoms
 
             if (!ValueEquals(preProcessedNewValue))
             {
-                _oldValue = _value;
                 _value = preProcessedNewValue;
-                if (Changed != null) { Changed.Raise(_value); }
+
+                if (Changed != null)
+                {
+                    Changed.Raise(_value);
+                }
+
                 if (ChangedWithHistory != null)
                 {
                     // NOTE: Doing new P() here, even though it is cleaner, generates garbage.
                     var pair = default(P);
-                    pair.Item1 = _value;
-                    pair.Item2 = _oldValue;
+                    pair.Item1 = _oldValue;
+                    pair.Item2 = _value;
                     ChangedWithHistory.Raise(pair);
                 }
+
+                _oldValue = _value;
                 return true;
             }
 
@@ -180,6 +182,7 @@ namespace UnityAtoms
 
             return new ObservableEvent<P>(ChangedWithHistory.Register, ChangedWithHistory.Unregister);
         }
+
         #endregion // Observable
 
         private T RunPreChangeTransformers(T value)
@@ -230,6 +233,7 @@ namespace UnityAtoms
                 Changed = (e as E1);
                 return;
             }
+
             if (typeof(E) == typeof(E2))
             {
                 ChangedWithHistory = (e as E2);
@@ -237,6 +241,43 @@ namespace UnityAtoms
             }
 
             throw new Exception($"Event type {typeof(E)} not supported! Use {typeof(E1)} or {typeof(E2)}.");
+        }
+
+        protected override void OnValueChanged()
+        {
+            _value = RunPreChangeTransformers(_value);
+
+            if (Changed != null)
+            {
+                Changed.Raise(_value);
+            }
+
+            if (ChangedWithHistory != null)
+            {
+                // NOTE: Doing new P() here, even though it is cleaner, generates garbage.
+                var pair = default(P);
+                pair.Item1 = _oldValue;
+                pair.Item2 = _value;
+                ChangedWithHistory.Raise(pair);
+            }
+
+            _oldValue = _value;
+        }
+
+        private void CreateNestedChangedEvent()
+        {
+            if (_changed == null)
+                MultiScriptableObject.AddScriptableObject(this, ref _changed, "Changed");
+            else
+                MultiScriptableObject.RemoveScriptableObject(_changed);
+        }
+
+        private void CreateNestedChangedWithHistoryEvent()
+        {
+            if (_changedWithHistory == null)
+                MultiScriptableObject.AddScriptableObject(this, ref _changedWithHistory, "Changed With History");
+            else
+                MultiScriptableObject.RemoveScriptableObject(_changedWithHistory);
         }
     }
 }

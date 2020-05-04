@@ -1,3 +1,4 @@
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace UnityAtoms
@@ -12,6 +13,7 @@ namespace UnityAtoms
         /// </summary>
         [SerializeField]
         [Multiline]
+        [PropertyOrder(0)]
         private string _developerDescription;
     }
 }

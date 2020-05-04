@@ -1,4 +1,5 @@
 using System.Collections;
+using Sirenix.OdinInspector;
 
 namespace UnityAtoms
 {
@@ -8,9 +9,12 @@ namespace UnityAtoms
     [EditorIcon("atom-icon-piglet")]
     public abstract class BaseAtomValueList : BaseAtom
     {
+        private string ClearedButtonLabel => Cleared == null ? "Create" : "Destroy";
+
         /// <summary>
         /// Event for when the list is cleared.
         /// </summary>
+        [InlineButton(nameof(CreateClearedEvent), "$ClearedButtonLabel")]
         public AtomEventBase Cleared;
         protected abstract IList IList { get; }
 
@@ -24,6 +28,14 @@ namespace UnityAtoms
             {
                 Cleared.Raise();
             }
+        }
+
+        private void CreateClearedEvent()
+        {
+            if(Cleared == null)
+                MultiScriptableObject.AddScriptableObject(this, ref Cleared, "Cleared");
+            else
+                MultiScriptableObject.RemoveScriptableObject(Cleared);
         }
     }
 }

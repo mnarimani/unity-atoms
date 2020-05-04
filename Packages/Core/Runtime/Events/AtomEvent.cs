@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace UnityAtoms
@@ -26,7 +27,7 @@ namespace UnityAtoms
         protected event Action<T> _onEvent;
 
         /// <summary>
-        /// The event replays the specified number of old values to new subscribers. Works like a ReplaySubject in Rx. 
+        /// The event replays the specified number of old values to new subscribers. Works like a ReplaySubject in Rx.
         /// </summary>
         [SerializeField]
         [Range(0, 10)]
@@ -66,11 +67,9 @@ namespace UnityAtoms
             AddToReplayBuffer(item);
         }
 
-        /// <summary>
-        /// Used in editor scipts since Raise is ambigious when using reflection to get method.
-        /// </summary>
-        /// <param name="item"></param>
-        public void RaiseEditor(T item) => Raise(item);
+        [Button("Raise")]
+        [DisableInEditorMode]
+        private void RaiseEditor() => Raise(_inspectorRaiseValue);
 
         /// <summary>
         /// Register handler to be called when the Event triggers.
@@ -159,13 +158,5 @@ namespace UnityAtoms
                 }
             }
         }
-
-#if UNITY_EDITOR && ODIN_INSPECTOR
-        [Sirenix.OdinInspector.Button(Name = "Raise")]
-        private void OdinRaiseButton()
-        {
-            RaiseEditor(InspectorRaiseValue);
-        }
-#endif
     }
 }

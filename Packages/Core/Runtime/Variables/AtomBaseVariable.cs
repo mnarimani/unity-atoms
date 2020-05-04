@@ -1,4 +1,5 @@
 using System;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace UnityAtoms
@@ -17,13 +18,10 @@ namespace UnityAtoms
         /// <value>The Variable value as an `object`.</value>
         public abstract object BaseValue { get; set; }
 
+        [PropertyOrder(1)]
+        [Space]
         [SerializeField]
         private String _id = default;
-
-        /// <summary>
-        /// Abstract method that could be implemented to reset the Variable value.
-        /// </summary>
-        public abstract void Reset(bool shouldTriggerEvents = false);
     }
 
     /// <summary>
@@ -56,6 +54,8 @@ namespace UnityAtoms
         public virtual T Value { get { return _value; } set { throw new NotImplementedException(); } }
 
         [SerializeField]
+        [PropertyOrder(3)]
+        [OnValueChanged(nameof(OnValueChanged))]
         protected T _value = default(T);
 
         /// <summary>
@@ -68,12 +68,8 @@ namespace UnityAtoms
             return other == this;
         }
 
-        /// <summary>
-        /// Not implemented.abstract Throws Exception
-        /// </summary>
-        public override void Reset(bool shouldTriggerEvents = false)
+        protected virtual void OnValueChanged()
         {
-            throw new NotImplementedException();
         }
     }
 }

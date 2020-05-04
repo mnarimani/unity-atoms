@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace UnityAtoms
@@ -14,14 +15,19 @@ namespace UnityAtoms
     public abstract class AtomValueList<T, E> : BaseAtomValueList, IList<T>
         where E : AtomEvent<T>
     {
+        private string AddedButtonLabel => Added == null ? "Create" : "Destroy";
+        private string RemovedButtonLabel => Removed == null ? "Create" : "Destroy";
+
         /// <summary>
         /// Event for when something is added to the list.
         /// </summary>
+        [InlineButton(nameof(CreateAddedEvent), "$AddedButtonLabel")]
         public E Added;
 
         /// <summary>
         /// Event for when something is removed from the list.
         /// </summary>
+        [InlineButton(nameof(CreateRemovedEvent), "$RemovedButtonLabel")]
         public E Removed;
 
         /// <summary>
@@ -68,6 +74,7 @@ namespace UnityAtoms
             {
                 Removed.Raise(item);
             }
+
             return true;
         }
 
@@ -107,14 +114,8 @@ namespace UnityAtoms
         /// <value>Get or set an item via index in the list.</value>
         public T this[int index]
         {
-            get
-            {
-                return list[index];
-            }
-            set
-            {
-                list[index] = value;
-            }
+            get { return list[index]; }
+            set { list[index] = value; }
         }
 
         /// <summary>
@@ -171,6 +172,7 @@ namespace UnityAtoms
         }
 
         #region Observable
+
         /// <summary>
         /// Make the add event into an `IObservable&lt;T&gt;`. Makes Value List's add Event compatible with for example UniRx.
         /// </summary>
@@ -179,7 +181,8 @@ namespace UnityAtoms
         {
             if (Added == null)
             {
-                throw new Exception("You must assign an Added event in order to observe when adding to the value list.");
+                throw new Exception(
+                    "You must assign an Added event in order to observe when adding to the value list.");
             }
 
             return new ObservableEvent<T>(Added.Register, Added.Unregister);
@@ -193,7 +196,8 @@ namespace UnityAtoms
         {
             if (Removed == null)
             {
-                throw new Exception("You must assign a Removed event in order to observe when removing from the value list.");
+                throw new Exception(
+                    "You must assign a Removed event in order to observe when removing from the value list.");
             }
 
             return new ObservableEvent<T>(Removed.Register, Removed.Unregister);
@@ -207,7 +211,8 @@ namespace UnityAtoms
         {
             if (Cleared == null)
             {
-                throw new Exception("You must assign a Cleared event in order to observe when clearing the value list.");
+                throw new Exception(
+                    "You must assign a Cleared event in order to observe when clearing the value list.");
             }
 
             return new ObservableVoidEvent(Cleared.Register, Cleared.Unregister);
@@ -215,6 +220,26 @@ namespace UnityAtoms
 
         #endregion // Observable
 
-        protected override IList IList { get => List; }
+        protected override IList IList
+        {
+            get => List;
+        }
+
+
+        private void CreateAddedEvent()
+        {
+            if (Added == null)
+                MultiScriptableObject.AddScriptableObject(this, ref Added, "Added");
+            else
+                MultiScriptableObject.RemoveScriptableObject(Added);
+        }
+
+        private void CreateRemovedEvent()
+        {
+            if (Removed == null)
+                MultiScriptableObject.AddScriptableObject(this, ref Removed, "Removed");
+            else
+                MultiScriptableObject.RemoveScriptableObject(Removed);
+        }
     }
 }

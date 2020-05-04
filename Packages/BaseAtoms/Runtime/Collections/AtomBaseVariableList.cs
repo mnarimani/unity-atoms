@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace UnityAtoms.BaseAtoms
@@ -29,7 +30,7 @@ namespace UnityAtoms.BaseAtoms
         private event Action<AtomBaseVariable> _removed;
         private event Action _cleared;
 
-        [SerializeField]
+        [SerializeField, InlineEditor(InlineEditorModes.FullEditor, DrawHeader = false)]
         private List<AtomBaseVariable> _serializedList = new List<AtomBaseVariable>();
 
         public void OnAfterDeserialize()
