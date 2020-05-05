@@ -91,6 +91,24 @@ namespace UnityAtoms
         [SerializeField]
         private VI _variableInstancer = default(VI);
 
+        public C Constant
+        {
+            get => _constant;
+            set => _constant = value;
+        }
+
+        public V Variable
+        {
+            get => _variable;
+            set => _variable = value;
+        }
+
+        public VI VariableInstancer
+        {
+            get => _variableInstancer;
+            set => _variableInstancer = value;
+        }
+
         protected AtomReference()
         {
             _usage = AtomReferenceUsage.VALUE;

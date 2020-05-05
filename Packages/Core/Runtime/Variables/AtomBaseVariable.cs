@@ -55,7 +55,7 @@ namespace UnityAtoms
 
         [SerializeField]
         [PropertyOrder(3)]
-        [OnValueChanged(nameof(OnValueChanged))]
+        [OnValueChanged(nameof(OnInspectorValueChanged))]
         protected T _value = default(T);
 
         /// <summary>
@@ -68,7 +68,7 @@ namespace UnityAtoms
             return other == this;
         }
 
-        protected virtual void OnValueChanged()
+        protected virtual void OnInspectorValueChanged()
         {
         }
     }

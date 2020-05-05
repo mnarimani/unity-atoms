@@ -243,7 +243,7 @@ namespace UnityAtoms
             throw new Exception($"Event type {typeof(E)} not supported! Use {typeof(E1)} or {typeof(E2)}.");
         }
 
-        protected override void OnValueChanged()
+        protected override void OnInspectorValueChanged()
         {
             _value = RunPreChangeTransformers(_value);
 
