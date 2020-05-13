@@ -1,4 +1,5 @@
 using System;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -7,7 +8,7 @@ namespace UnityAtoms
 
     /// <summary>
     /// An Event Instancer is a MonoBehaviour that takes an Event as a base and creates an in memory copy of it on OnEnable.
-    /// This is handy when you want to use Events for prefabs that are instantiated at runtime. 
+    /// This is handy when you want to use Events for prefabs that are instantiated at runtime.
     /// </summary>
     /// <typeparam name="T">The value type.</typeparam>
     /// <typeparam name="E">Event of type T.</typeparam>
@@ -51,7 +52,7 @@ namespace UnityAtoms
         }
 
         /// <summary>
-        /// Set event by type. 
+        /// Set event by type.
         /// </summary>
         /// <param name="e">The new event value.</param>
         /// <typeparam name="E"></typeparam>
