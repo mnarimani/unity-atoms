@@ -26,7 +26,7 @@ namespace UnityAtoms
             IList.Clear();
             if (null != Cleared)
             {
-                Cleared.Raise();
+                Cleared.Invoke();
             }
         }
 
@@ -35,7 +35,7 @@ namespace UnityAtoms
             if(Cleared == null)
                 MultiScriptableObject.AddScriptableObject(this, ref Cleared, "Cleared");
             else
-                MultiScriptableObject.RemoveScriptableObject(Cleared);
+                MultiScriptableObject.RemoveScriptableObject(this, Cleared);
         }
     }
 }

@@ -57,7 +57,7 @@ namespace UnityAtoms
             list.Add(item);
             if (null != Added)
             {
-                Added.Raise(item);
+                Added.Invoke(item);
             }
         }
 
@@ -72,7 +72,7 @@ namespace UnityAtoms
             if (!removed) return false;
             if (null != Removed)
             {
-                Removed.Raise(item);
+                Removed.Invoke(item);
             }
 
             return true;
@@ -153,7 +153,7 @@ namespace UnityAtoms
             list.RemoveAt(index);
             if (null != Removed)
             {
-                Removed.Raise(item);
+                Removed.Invoke(item);
             }
         }
 
@@ -167,7 +167,7 @@ namespace UnityAtoms
             list.Insert(index, item);
             if (Added != null)
             {
-                Added.Raise(item);
+                Added.Invoke(item);
             }
         }
 
@@ -185,7 +185,7 @@ namespace UnityAtoms
                     "You must assign an Added event in order to observe when adding to the value list.");
             }
 
-            return new ObservableEvent<T>(Added.Register, Added.Unregister);
+            return new ObservableEvent<T>(Added.AddListener, Added.RemoveListener);
         }
 
         /// <summary>
@@ -200,7 +200,7 @@ namespace UnityAtoms
                     "You must assign a Removed event in order to observe when removing from the value list.");
             }
 
-            return new ObservableEvent<T>(Removed.Register, Removed.Unregister);
+            return new ObservableEvent<T>(Removed.AddListener, Removed.RemoveListener);
         }
 
         /// <summary>
@@ -215,7 +215,7 @@ namespace UnityAtoms
                     "You must assign a Cleared event in order to observe when clearing the value list.");
             }
 
-            return new ObservableVoidEvent(Cleared.Register, Cleared.Unregister);
+            return new ObservableVoidEvent(Cleared.AddListener, Cleared.RemoveListener);
         }
 
         #endregion // Observable
@@ -231,7 +231,7 @@ namespace UnityAtoms
             if (Added == null)
                 MultiScriptableObject.AddScriptableObject(this, ref Added, "Added");
             else
-                MultiScriptableObject.RemoveScriptableObject(Added);
+                MultiScriptableObject.RemoveScriptableObject(this, Added);
         }
 
         private void CreateRemovedEvent()
@@ -239,7 +239,7 @@ namespace UnityAtoms
             if (Removed == null)
                 MultiScriptableObject.AddScriptableObject(this, ref Removed, "Removed");
             else
-                MultiScriptableObject.RemoveScriptableObject(Removed);
+                MultiScriptableObject.RemoveScriptableObject(this, Removed);
         }
     }
 }

@@ -60,22 +60,22 @@ namespace UnityAtoms
         /// Raise the Event.
         /// </summary>
         /// <param name="item">The value associated with the Event.</param>
-        public void Raise(T item)
+        public void Invoke(T item)
         {
-            base.Raise();
+            base.Invoke();
             _onEvent?.Invoke(item);
             AddToReplayBuffer(item);
         }
 
         [Button("Raise")]
         [DisableInEditorMode]
-        private void RaiseEditor() => Raise(_inspectorRaiseValue);
+        private void RaiseEditor() => Invoke(_inspectorRaiseValue);
 
         /// <summary>
         /// Register handler to be called when the Event triggers.
         /// </summary>
         /// <param name="action">The handler.</param>
-        public void Register(Action<T> action)
+        public void AddListener(Action<T> action)
         {
             _onEvent += action;
             ReplayBufferToSubscriber(action);
@@ -85,7 +85,7 @@ namespace UnityAtoms
         /// Unregister handler that was registered using the `Register` method.
         /// </summary>
         /// <param name="action">The handler.</param>
-        public void Unregister(Action<T> action)
+        public void RemoveListener(Action<T> action)
         {
             _onEvent -= action;
         }
@@ -93,7 +93,7 @@ namespace UnityAtoms
         /// <summary>
         /// Unregister all handlers that were registered using the `Register` method.
         /// </summary>
-        public void UnregisterAll()
+        public void RemoveAllListeners()
         {
             _onEvent = null;
         }
@@ -102,7 +102,7 @@ namespace UnityAtoms
         /// Register a Listener that in turn trigger all its associated handlers when the Event triggers.
         /// </summary>
         /// <param name="listener">The Listener to register.</param>
-        public void RegisterListener(IAtomListener<T> listener, bool replayEventsBuffer = true)
+        public void AddListener(IAtomListener<T> listener, bool replayEventsBuffer = true)
         {
             _onEvent += listener.OnEventRaised;
             if (replayEventsBuffer)
@@ -115,7 +115,7 @@ namespace UnityAtoms
         /// Unregister a listener that was registered using the `RegisterListener` method.
         /// </summary>
         /// <param name="listener">The Listener to unregister.</param>
-        public void UnregisterListener(IAtomListener<T> listener)
+        public void RemoveListener(IAtomListener<T> listener)
         {
             _onEvent -= listener.OnEventRaised;
         }
@@ -127,7 +127,7 @@ namespace UnityAtoms
         /// <returns>The Event as an `IObservable&lt;T&gt;`.</returns>
         public IObservable<T> Observe()
         {
-            return new ObservableEvent<T>(Register, Unregister);
+            return new ObservableEvent<T>(AddListener, RemoveListener);
         }
         #endregion // Observable
 

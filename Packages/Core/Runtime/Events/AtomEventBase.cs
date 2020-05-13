@@ -15,7 +15,7 @@ namespace UnityAtoms
         /// </summary>
         public event Action OnEventNoValue;
 
-        public virtual void Raise()
+        public virtual void Invoke()
         {
             OnEventNoValue?.Invoke();
         }
@@ -24,7 +24,7 @@ namespace UnityAtoms
         /// Register handler to be called when the Event triggers.
         /// </summary>
         /// <param name="del">The handler.</param>
-        public void Register(Action del)
+        public void AddListener(Action del)
         {
             OnEventNoValue += del;
         }
@@ -33,7 +33,7 @@ namespace UnityAtoms
         /// Unregister handler that was registered using the `Register` method.
         /// </summary>
         /// <param name="del">The handler.</param>
-        public void Unregister(Action del)
+        public void RemoveListener(Action del)
         {
             OnEventNoValue -= del;
         }
@@ -42,7 +42,7 @@ namespace UnityAtoms
         /// Register a Listener that in turn trigger all its associated handlers when the Event triggers.
         /// </summary>
         /// <param name="listener">The Listener to register.</param>
-        public void RegisterListener(IAtomListener listener)
+        public void AddListener(IAtomListener listener)
         {
             OnEventNoValue += listener.OnEventRaised;
         }
@@ -51,7 +51,7 @@ namespace UnityAtoms
         /// Unregister a listener that was registered using the `RegisterListener` method.
         /// </summary>
         /// <param name="listener">The Listener to unregister.</param>
-        public void UnregisterListener(IAtomListener listener)
+        public void RemoveListener(IAtomListener listener)
         {
             OnEventNoValue -= listener.OnEventRaised;
         }

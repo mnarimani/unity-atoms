@@ -54,13 +54,13 @@ namespace UnityAtoms
         private void OnEnable()
         {
             if (Event == null) return;
-            Event.RegisterListener(this, _replayEventBufferOnRegister);
+            Event.AddListener(this, _replayEventBufferOnRegister);
         }
 
         private void OnDisable()
         {
             if (Event == null) return;
-            Event.UnregisterListener(this);
+            Event.RemoveListener(this);
         }
 
         /// <summary>

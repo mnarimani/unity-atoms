@@ -21,7 +21,7 @@ namespace UnityAtoms
         where F : AtomFunction<T, T>
     {
         /// <summary>
-        /// The Variable value as a property.
+        /// The Variable value as a property.atom
         /// </summary>
         /// <returns>Get or set the Variable's value.</returns>
         public override T Value
@@ -124,7 +124,7 @@ namespace UnityAtoms
 
                 if (Changed != null)
                 {
-                    Changed.Raise(_value);
+                    Changed.Invoke(_value);
                 }
 
                 if (ChangedWithHistory != null)
@@ -133,7 +133,7 @@ namespace UnityAtoms
                     var pair = default(P);
                     pair.Item1 = _oldValue;
                     pair.Item2 = _value;
-                    ChangedWithHistory.Raise(pair);
+                    ChangedWithHistory.Invoke(pair);
                 }
 
                 _oldValue = _value;
@@ -166,7 +166,7 @@ namespace UnityAtoms
                 throw new Exception("You must assign a Changed event in order to observe variable changes.");
             }
 
-            return new ObservableEvent<T>(Changed.Register, Changed.Unregister);
+            return new ObservableEvent<T>(Changed.AddListener, Changed.RemoveListener);
         }
 
         /// <summary>
@@ -180,7 +180,7 @@ namespace UnityAtoms
                 throw new Exception("You must assign a ChangedWithHistory event in order to observe variable changes.");
             }
 
-            return new ObservableEvent<P>(ChangedWithHistory.Register, ChangedWithHistory.Unregister);
+            return new ObservableEvent<P>(ChangedWithHistory.AddListener, ChangedWithHistory.RemoveListener);
         }
 
         #endregion // Observable
@@ -249,7 +249,7 @@ namespace UnityAtoms
 
             if (Changed != null)
             {
-                Changed.Raise(_value);
+                Changed.Invoke(_value);
             }
 
             if (ChangedWithHistory != null)
@@ -258,7 +258,7 @@ namespace UnityAtoms
                 var pair = default(P);
                 pair.Item1 = _oldValue;
                 pair.Item2 = _value;
-                ChangedWithHistory.Raise(pair);
+                ChangedWithHistory.Invoke(pair);
             }
 
             _oldValue = _value;
@@ -269,7 +269,7 @@ namespace UnityAtoms
             if (_changed == null)
                 MultiScriptableObject.AddScriptableObject(this, ref _changed, "Changed");
             else
-                MultiScriptableObject.RemoveScriptableObject(_changed);
+                MultiScriptableObject.RemoveScriptableObject(this, _changed);
         }
 
         private void CreateNestedChangedWithHistoryEvent()
@@ -277,7 +277,7 @@ namespace UnityAtoms
             if (_changedWithHistory == null)
                 MultiScriptableObject.AddScriptableObject(this, ref _changedWithHistory, "Changed With History");
             else
-                MultiScriptableObject.RemoveScriptableObject(_changedWithHistory);
+                MultiScriptableObject.RemoveScriptableObject(this, _changedWithHistory);
         }
     }
 }

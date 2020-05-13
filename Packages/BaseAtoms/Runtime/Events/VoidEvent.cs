@@ -9,9 +9,9 @@ namespace UnityAtoms.BaseAtoms
     [CreateAssetMenu(menuName = "Unity Atoms/Events/Void", fileName = "VoidEvent")]
     public sealed class VoidEvent : AtomEvent<Void>
     {
-        public override void Raise()
+        public override void Invoke()
         {
-            Raise(new Void());
+            Invoke(new Void());
         }
     }
 }
