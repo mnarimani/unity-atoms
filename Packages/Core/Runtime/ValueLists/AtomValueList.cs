@@ -46,6 +46,7 @@ namespace UnityAtoms
         /// <typeparam name="T">The list item type.</typeparam>
         /// <returns>The actual `List&lt;T&gt;`.</returns>
         [SerializeField]
+        [Space]
         private List<T> list = new List<T>();
 
         /// <summary>
