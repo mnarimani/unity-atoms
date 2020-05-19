@@ -120,11 +120,6 @@ namespace UnityAtoms
             _value = value;
         }
 
-        public static implicit operator T(AtomReference<T, P, C, V, E1, E2, F, VI> reference)
-        {
-            return reference.Value;
-        }
-
         protected abstract bool ValueEquals(T other);
 
         public bool Equals(AtomReference<T, P, C, V, E1, E2, F, VI> other)
