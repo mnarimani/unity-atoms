@@ -23,7 +23,7 @@ namespace UnityAtoms.BaseAtoms
                 while (enumerator.MoveNext())
                 {
                     var value = enumerator.Current.Value;
-                    if (enumerator.Current.Key == key)
+                    if (enumerator.Current.Key.Value == key)
                     {
                         toReturn = (T)enumerator.Current.Value;
                         break;
