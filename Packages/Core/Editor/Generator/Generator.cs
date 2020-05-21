@@ -15,32 +15,71 @@ namespace UnityAtoms.Editor
     {
         public static string[] GetTemplatePaths()
         {
-            var templateSearchPath = Runtime.IsUnityAtomsRepo ?
-                Directory.GetParent(Application.dataPath).Parent.FullName : // "Packages"
-                Directory.GetParent(Application.dataPath).FullName;
+            var templateSearchPath = Runtime.IsUnityAtomsRepo
+                ? Directory.GetParent(Application.dataPath).Parent.FullName
+                : Directory.GetParent(Application.dataPath).FullName;
 
-            return Directory.GetFiles(templateSearchPath, "UA_Template*.txt", SearchOption.AllDirectories);
+            string[] paths = Directory.GetFiles(templateSearchPath, "UA_Template*.txt", SearchOption.AllDirectories);
+
+            if (paths.Length == 0)
+            {
+                // Search parent directory too
+                templateSearchPath = Directory.GetParent(templateSearchPath).FullName;
+                paths = Directory.GetFiles(templateSearchPath, "UA_Template*.txt", SearchOption.AllDirectories);
+            }
+
+            return paths;
         }
 
-        public static List<string> CreateTemplateConditions(bool isValueTypeEquatable, string valueTypeNamespace, string subUnityAtomsNamespace)
+        public static List<string> CreateTemplateConditions(
+            bool isValueTypeEquatable,
+            string valueTypeNamespace,
+            string subUnityAtomsNamespace)
         {
             var templateConditions = new List<string>();
-            if (isValueTypeEquatable) { templateConditions.Add("EQUATABLE"); }
-            if (!string.IsNullOrEmpty(valueTypeNamespace)) { templateConditions.Add("TYPE_HAS_NAMESPACE"); }
-            if (!string.IsNullOrEmpty(subUnityAtomsNamespace)) { templateConditions.Add("HAS_SUB_UA_NAMESPACE"); }
+            if (isValueTypeEquatable)
+            {
+                templateConditions.Add("EQUATABLE");
+            }
+
+            if (!string.IsNullOrEmpty(valueTypeNamespace))
+            {
+                templateConditions.Add("TYPE_HAS_NAMESPACE");
+            }
+
+            if (!string.IsNullOrEmpty(subUnityAtomsNamespace))
+            {
+                templateConditions.Add("HAS_SUB_UA_NAMESPACE");
+            }
 
             return templateConditions;
         }
 
-        public static Dictionary<string, string> CreateTemplateVariablesMap(string valueType, string valueTypeNamespace, string subUnityAtomsNamespace)
+        public static Dictionary<string, string> CreateTemplateVariablesMap(
+            string valueType,
+            string valueTypeNamespace,
+            string subUnityAtomsNamespace)
         {
-            var templateVariables = new Dictionary<string, string>() {
-                { "VALUE_TYPE_NAME", valueType.Capitalize() },
-                { "VALUE_TYPE", valueType },
-                { "VALUE_TYPE_NAME_NO_PAIR", valueType.Contains("Pair") ? valueType.Capitalize().Remove(valueType.IndexOf("Pair")) : valueType.Capitalize() }
+            var templateVariables = new Dictionary<string, string>()
+            {
+                {"VALUE_TYPE_NAME", valueType.Capitalize()},
+                {"VALUE_TYPE", valueType},
+                {
+                    "VALUE_TYPE_NAME_NO_PAIR",
+                    valueType.Contains("Pair")
+                        ? valueType.Capitalize().Remove(valueType.IndexOf("Pair"))
+                        : valueType.Capitalize()
+                }
             };
-            if (!string.IsNullOrEmpty(valueTypeNamespace)) { templateVariables.Add("TYPE_NAMESPACE", valueTypeNamespace); }
-            if (!string.IsNullOrEmpty(subUnityAtomsNamespace)) { templateVariables.Add("SUB_UA_NAMESPACE", subUnityAtomsNamespace); }
+            if (!string.IsNullOrEmpty(valueTypeNamespace))
+            {
+                templateVariables.Add("TYPE_NAMESPACE", valueTypeNamespace);
+            }
+
+            if (!string.IsNullOrEmpty(subUnityAtomsNamespace))
+            {
+                templateVariables.Add("SUB_UA_NAMESPACE", subUnityAtomsNamespace);
+            }
 
             return templateVariables;
         }
@@ -68,7 +107,12 @@ namespace UnityAtoms.Editor
         /// generator.Generate("MyStruct", "", false, new List&lt;AtomType&gt;() { AtomTypes.ACTION }, "MyNamespace", ""); // Generates an Atom Action of type MyStruct
         /// </code>
         /// </example>
-        public static void Generate(AtomReceipe atomReceipe, string baseWritePath, string[] templatePaths, List<string> templateConditions, Dictionary<string, string> templateVariables)
+        public static void Generate(
+            AtomReceipe atomReceipe,
+            string baseWritePath,
+            string[] templatePaths,
+            List<string> templateConditions,
+            Dictionary<string, string> templateVariables)
         {
             var (atomType, valueType) = atomReceipe;
 
@@ -78,17 +122,24 @@ namespace UnityAtoms.Editor
                 Debug.LogWarning($"{Runtime.Constants.LOG_PREFIX} You need to specify a value type. Aborting!");
                 return;
             }
+
             if (string.IsNullOrEmpty(baseWritePath) || !Directory.Exists(baseWritePath))
             {
-                Debug.LogWarning($"{Runtime.Constants.LOG_PREFIX} You need to specify a valid base write path. Aborting!");
+                Debug.LogWarning(
+                    $"{Runtime.Constants.LOG_PREFIX} You need to specify a valid base write path. Aborting!");
                 return;
             }
 
             Debug.Log($"{Runtime.Constants.LOG_PREFIX} Generating atom {atomType.Name} for value type {valueType}");
 
-            List<Tuple<string, string>> filesToGenerate = new List<Tuple<string, string>>() { new Tuple<string, string>(atomType.TemplateName, atomType.RelativeFileNameAndPath) };
-            if (atomType.HasDrawerTemplate) filesToGenerate.Add(new Tuple<string, string>(atomType.DrawerTemplateName, atomType.RelativeDrawerFileNameAndPath));
-            if (atomType.HasEditorTemplate) filesToGenerate.Add(new Tuple<string, string>(atomType.EditorTemplateName, atomType.RelativeEditorFileNameAndPath));
+            List<Tuple<string, string>> filesToGenerate = new List<Tuple<string, string>>()
+                {new Tuple<string, string>(atomType.TemplateName, atomType.RelativeFileNameAndPath)};
+            if (atomType.HasDrawerTemplate)
+                filesToGenerate.Add(new Tuple<string, string>(atomType.DrawerTemplateName,
+                    atomType.RelativeDrawerFileNameAndPath));
+            if (atomType.HasEditorTemplate)
+                filesToGenerate.Add(new Tuple<string, string>(atomType.EditorTemplateName,
+                    atomType.RelativeEditorFileNameAndPath));
 
             foreach (var (templateName, relativeFilePath) in filesToGenerate)
             {
@@ -96,11 +147,13 @@ namespace UnityAtoms.Editor
 
                 if (string.IsNullOrEmpty(templatePath))
                 {
-                    Debug.Log($"{Runtime.Constants.LOG_PREFIX} Template {templateName} for {atomType.DisplayName} not found. Skipping!");
+                    Debug.Log(
+                        $"{Runtime.Constants.LOG_PREFIX} Template {templateName} for {atomType.DisplayName} not found.. Skipping!");
                     return;
                 }
 
-                var resolvedRelativeFilePath = Templating.ResolveVariables(templateVariables: templateVariables, toResolve: relativeFilePath);
+                var resolvedRelativeFilePath =
+                    Templating.ResolveVariables(templateVariables: templateVariables, toResolve: relativeFilePath);
                 var template = File.ReadAllText(templatePath);
                 var filePath = Path.Combine(baseWritePath, resolvedRelativeFilePath);
                 var fileDirectory = Path.GetDirectoryName(filePath);
@@ -143,6 +196,7 @@ namespace UnityAtoms.Editor
                 {
                     countNamespaces.Add(ns, 1);
                 }
+
                 currentIndex = namespaceEndIndex;
             }
 
