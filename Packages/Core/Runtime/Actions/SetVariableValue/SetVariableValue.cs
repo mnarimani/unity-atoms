@@ -28,20 +28,20 @@ namespace UnityAtoms
         /// The Variable to set.
         /// </summary>
         [SerializeField]
-        private V _variable = null;
+        private V variable = null;
 
         /// <summary>
         /// The value to use.
         /// </summary>
         [SerializeField]
-        private R _value = null;
+        private R value = null;
 
         /// <summary>
         /// Perform the action.
         /// </summary>
         public override void Do()
         {
-            _variable.Value = _value.Value;
+            variable.Value = value.Value;
         }
     }
 }

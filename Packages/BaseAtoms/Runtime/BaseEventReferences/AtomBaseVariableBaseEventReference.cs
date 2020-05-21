@@ -6,18 +6,18 @@ namespace UnityAtoms.BaseAtoms
     /// <summary>
     /// Different types of Event Reference usages.
     /// </summary>
-    public class AtomBaseVariableEventReferenceUsage
+    public enum AtomBaseVariableEventReferenceUsage
     {
-        public const int EVENT = 0;
-        public const int EVENT_INSTANCER = 1;
-        public const int COLLECTION_ADDED_EVENT = 2;
-        public const int COLLECTION_REMOVED_EVENT = 3;
-        public const int LIST_ADDED_EVENT = 4;
-        public const int LIST_REMOVED_EVENT = 5;
-        public const int COLLECTION_INSTANCER_ADDED_EVENT = 6;
-        public const int COLLECTION_INSTANCER_REMOVED_EVENT = 7;
-        public const int LIST_INSTANCER_ADDED_EVENT = 8;
-        public const int LIST_INSTANCER_REMOVED_EVENT = 9;
+        Event,
+        EventInstancer,
+        CollectionAddedEvent,
+        CollectionRemovedEvent,
+        ListAddedEvent,
+        ListRemovedEvent,
+        CollectionInstancerAddedEvent,
+        CollectionInstancerRemovedEvent,
+        ListInstancerAddedEvent,
+        ListInstancerRemovedEvent,
     }
 
     /// <summary>
@@ -36,23 +36,23 @@ namespace UnityAtoms.BaseAtoms
         {
             get
             {
-                switch (Usage)
+                switch ((AtomBaseVariableEventReferenceUsage) Usage)
                 {
-                    case (AtomBaseVariableEventReferenceUsage.LIST_ADDED_EVENT):
+                    case (AtomBaseVariableEventReferenceUsage.ListAddedEvent):
                     {
-                        return _list != null ? _list.Added : null;
+                        return list != null ? list.Added : null;
                     }
-                    case (AtomBaseVariableEventReferenceUsage.LIST_REMOVED_EVENT):
+                    case (AtomBaseVariableEventReferenceUsage.ListRemovedEvent):
                     {
-                        return _list != null ? _list.Removed : null;
+                        return list != null ? list.Removed : null;
                     }
-                    case (AtomBaseVariableEventReferenceUsage.EVENT_INSTANCER):
+                    case (AtomBaseVariableEventReferenceUsage.EventInstancer):
                     {
-                        return instancer.GetInstance(_event);
+                        return Instancer.GetInstance(RawEvent);
                     }
-                    case (AtomBaseVariableEventReferenceUsage.EVENT):
+                    case (AtomBaseVariableEventReferenceUsage.Event):
                     {
-                        return _event;
+                        return RawEvent;
                     }
                     default:
                     {
@@ -62,21 +62,21 @@ namespace UnityAtoms.BaseAtoms
             }
             set
             {
-                switch (Usage)
+                switch ((AtomBaseVariableEventReferenceUsage) Usage)
                 {
-                    case (AtomBaseVariableEventReferenceUsage.LIST_ADDED_EVENT):
+                    case (AtomBaseVariableEventReferenceUsage.ListAddedEvent):
                         {
-                            _list.Added = value;
+                            list.Added = value;
                             break;
                         }
-                    case (AtomBaseVariableEventReferenceUsage.LIST_REMOVED_EVENT):
+                    case (AtomBaseVariableEventReferenceUsage.ListRemovedEvent):
                         {
-                            _list.Removed = value;
+                            list.Removed = value;
                             break;
                         }
-                    case (AtomBaseVariableEventReferenceUsage.EVENT):
+                    case (AtomBaseVariableEventReferenceUsage.Event):
                         {
-                            _event = value;
+                            RawEvent = value;
                             break;
                         }
                     default:
@@ -89,6 +89,6 @@ namespace UnityAtoms.BaseAtoms
         /// List used if `Usage` is set to `LIST_ADDED_EVENT` or `LIST_REMOVED_EVENT`.
         /// </summary>
         [SerializeField]
-        private AtomList _list = default(AtomList);
+        private AtomList list = default(AtomList);
     }
 }

@@ -1,6 +1,5 @@
 #if UNITY_2018_4_OR_NEWER
 using System;
-using System.Linq;
 using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
@@ -68,7 +67,7 @@ namespace UnityAtoms.Editor
                     valueType: "Void",
                     baseWritePath: Path.Combine(path, "BaseAtoms"),
                     isValueEquatable: false,
-                    atomTypesToGenerate: new List<AtomType>() { AtomTypes.EVENT, AtomTypes.UNITY_EVENT, AtomTypes.BASE_EVENT_REFERENCE, AtomTypes.EVENT_INSTANCER, AtomTypes.BASE_EVENT_REFERENCE_LISTENER },
+                    atomTypesToGenerate: new List<AtomType>() { AtomTypes.EVENT, AtomTypes.UNITY_EVENT, AtomTypes.BASE_EVENT_REFERENCE, AtomTypes.BASE_EVENT_REFERENCE_LISTENER },
                     typeNamespace: "",
                     subUnityAtomsNamespace: "BaseAtoms"
                 ),
@@ -86,7 +85,7 @@ namespace UnityAtoms.Editor
                     valueType: "AtomBaseVariable",
                     baseWritePath: Path.Combine(path, "BaseAtoms"),
                     isValueEquatable: false,
-                    atomTypesToGenerate: new List<AtomType>() { AtomTypes.EVENT, AtomTypes.ACTION, AtomTypes.UNITY_EVENT, AtomTypes.BASE_EVENT_REFERENCE, AtomTypes.EVENT_INSTANCER, AtomTypes.BASE_EVENT_REFERENCE_LISTENER },
+                    atomTypesToGenerate: new List<AtomType>() { AtomTypes.EVENT, AtomTypes.ACTION, AtomTypes.UNITY_EVENT, AtomTypes.BASE_EVENT_REFERENCE, AtomTypes.BASE_EVENT_REFERENCE_LISTENER },
                     typeNamespace: "",
                     subUnityAtomsNamespace: "BaseAtoms"
                 ),
@@ -98,7 +97,7 @@ namespace UnityAtoms.Editor
                     valueType: "FSMTransitionData",
                     baseWritePath: Path.Combine(path, "FSM"),
                     isValueEquatable: false,
-                    atomTypesToGenerate: new List<AtomType>() { AtomTypes.EVENT, AtomTypes.ACTION, AtomTypes.UNITY_EVENT, AtomTypes.BASE_EVENT_REFERENCE, AtomTypes.EVENT_INSTANCER, AtomTypes.BASE_EVENT_REFERENCE_LISTENER },
+                    atomTypesToGenerate: new List<AtomType>() { AtomTypes.EVENT, AtomTypes.ACTION, AtomTypes.UNITY_EVENT, AtomTypes.BASE_EVENT_REFERENCE, AtomTypes.BASE_EVENT_REFERENCE_LISTENER },
                     typeNamespace: "",
                     subUnityAtomsNamespace: "FSM"
                 ),

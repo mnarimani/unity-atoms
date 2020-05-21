@@ -3,14 +3,14 @@ using UnityEngine;
 
 namespace UnityAtoms.BaseAtoms
 {
-    public class VoidBaseEventReferenceUsage
+    public enum VoidBaseEventReferenceUsage
     {
-        public const int EVENT = 0;
-        public const int EVENT_INSTANCER = 1;
-        public const int COLLECTION_CLEARED_EVENT = 2;
-        public const int LIST_CLEARED_EVENT = 3;
-        public const int COLLECTION_INSTANCER_CLEARED_EVENT = 4;
-        public const int LIST_INSTANCER_CLEARED_EVENT = 5;
+        Event,
+        EventInstancer,
+        CollectionClearedEvent,
+        ListClearedEvent,
+        CollectionInstancerClearedEvent,
+        ListInstancerClearedEvent,
     }
 
     /// <summary>
@@ -29,32 +29,32 @@ namespace UnityAtoms.BaseAtoms
         {
             get
             {
-                switch (Usage)
+                switch ((VoidBaseEventReferenceUsage) Usage)
                 {
-                    case (VoidBaseEventReferenceUsage.EVENT_INSTANCER):
+                    case (VoidBaseEventReferenceUsage.EventInstancer):
                     {
-                        return instancer.GetInstance(_event);
+                        return Instancer.GetInstance(RawEvent);
                     }
-                    case (VoidBaseEventReferenceUsage.EVENT):
-                        return _event;
+                    case (VoidBaseEventReferenceUsage.Event):
+                        return RawEvent;
                     default:
                         throw new ArgumentOutOfRangeException(nameof(Usage));
                 }
             }
             set
             {
-                switch (Usage)
+                switch ((VoidBaseEventReferenceUsage) Usage)
                 {
-                    case (VoidBaseEventReferenceUsage.LIST_CLEARED_EVENT):
-                        {
-                            _list.Cleared = value;
-                            break;
-                        }
-                    case (VoidBaseEventReferenceUsage.EVENT):
-                        {
-                            _event = value;
-                            break;
-                        }
+                    case (VoidBaseEventReferenceUsage.ListClearedEvent):
+                    {
+                        list.Cleared = value;
+                        break;
+                    }
+                    case (VoidBaseEventReferenceUsage.Event):
+                    {
+                        RawEvent = value;
+                        break;
+                    }
                     default:
                         throw new NotSupportedException($"Event not reassignable for usage {Usage}.");
                 }
@@ -65,6 +65,6 @@ namespace UnityAtoms.BaseAtoms
         /// List used if `Usage` is set to `LIST_CLEARED_EVENT`.
         /// </summary>
         [SerializeField]
-        private AtomList _list = default(AtomList);
+        private AtomList list = default(AtomList);
     }
 }

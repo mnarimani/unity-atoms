@@ -7,12 +7,12 @@ namespace UnityAtoms
     /// <summary>
     /// Different types of Event Reference usages.
     /// </summary>
-    public class AtomEventReferenceUsage
+    public enum AtomEventReferenceUsage
     {
-        public const int EVENT = 0;
-        public const int EVENT_INSTANCER = 1;
-        public const int VARIABLE = 2;
-        public const int VARIABLE_INSTANCER = 3;
+         Event,
+         EventInstancer,
+         Variable,
+         VariableInstancer,
     }
 
     /// <summary>
@@ -24,9 +24,9 @@ namespace UnityAtoms
         /// Describes how we use the Event Reference.
         /// </summary>
         [SerializeField]
-        private int usage;
+        private AtomEventReferenceUsage usage;
 
-        public int Usage
+        public AtomEventReferenceUsage Usage
         {
             get => usage;
             set => usage = value;
@@ -52,10 +52,10 @@ namespace UnityAtoms
             {
                 switch (Usage)
                 {
-                    case (AtomEventReferenceUsage.EVENT_INSTANCER):
-                        return instancer.GetInstance(_event);
-                    case (AtomEventReferenceUsage.EVENT):
-                        return _event;
+                    case (AtomEventReferenceUsage.EventInstancer):
+                        return instancer.GetInstance(targetEvent);
+                    case (AtomEventReferenceUsage.Event):
+                        return targetEvent;
                     default:
                         throw new ArgumentOutOfRangeException(nameof(Usage));
                 }
@@ -64,9 +64,9 @@ namespace UnityAtoms
             {
                 switch (Usage)
                 {
-                    case (AtomEventReferenceUsage.EVENT):
+                    case (AtomEventReferenceUsage.Event):
                         {
-                            _event = value;
+                            targetEvent = value;
                             break;
                         }
                     default:
@@ -79,17 +79,29 @@ namespace UnityAtoms
         /// Event used if `Usage` is set to `Event`.
         /// </summary>
         [SerializeField]
-        protected E _event = default(E);
+        private E targetEvent = default(E);
 
         /// <summary>
         /// EventInstancer used if `Usage` is set to `EventInstancer`.
         /// </summary>
         [SerializeField]
-        protected AtomInstancer instancer = default(AtomInstancer);
+        private AtomInstancer instancer = default(AtomInstancer);
+
+        public AtomInstancer Instancer
+        {
+            get => instancer;
+            set => instancer = value;
+        }
+
+        public E RawEvent
+        {
+            get => targetEvent;
+            set => targetEvent = value;
+        }
 
         protected AtomBaseEventReference()
         {
-            Usage = AtomEventReferenceUsage.EVENT;
+            Usage = AtomEventReferenceUsage.Event;
         }
 
         /// <summary>

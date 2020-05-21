@@ -29,13 +29,9 @@ namespace UnityAtoms
             get
             {
                 CheckInstancing();
-                return _value;
+                return value;
             }
-            set
-            {
-                CheckInstancing();
-                SetValue(value);
-            }
+            set => SetValue(value);
         }
 
         /// <summary>
@@ -47,36 +43,20 @@ namespace UnityAtoms
             get
             {
                 CheckInstancing();
-                return _oldValue;
+                return oldValue;
             }
         }
 
-        public override AtomEventBase BaseChanged
+        internal override AtomEventBase BaseChanged
         {
-            get
-            {
-                CheckInstancing();
-                return _changed;
-            }
-            set
-            {
-                CheckInstancing();
-                _changed = (E1) value;
-            }
+            get => changed;
+            set => changed = (E1) value;
         }
 
-        public override AtomEventBase BaseChangedWithHistory
+        internal override AtomEventBase BaseChangedWithHistory
         {
-            get
-            {
-                CheckInstancing();
-                return _changedWithHistory;
-            }
-            set
-            {
-                CheckInstancing();
-                _changedWithHistory = (E2) value;
-            }
+            get => changedWithHistory;
+            set => changedWithHistory = (E2) value;
         }
 
         /// <summary>
@@ -87,12 +67,14 @@ namespace UnityAtoms
             get
             {
                 CheckInstancing();
-                return _changed;
+                return changed;
             }
             set
             {
-                CheckInstancing();
-                _changed = value;
+                if (!CheckInstancing())
+                    return;
+
+                changed = value;
             }
         }
 
@@ -104,17 +86,19 @@ namespace UnityAtoms
             get
             {
                 CheckInstancing();
-                return _changedWithHistory;
+                return changedWithHistory;
             }
             set
             {
-                CheckInstancing();
-                _changedWithHistory = value;
+                if (!CheckInstancing())
+                    return;
+
+                changedWithHistory = value;
             }
         }
 
-        private string ChangedEventButtonLabel => _changed == null ? "Create" : "Destroy";
-        private string ChangedWithHistoryEventButtonLabel => _changedWithHistory == null ? "Create" : "Destroy";
+        private string ChangedEventButtonLabel => changed == null ? "Create" : "Destroy";
+        private string ChangedWithHistoryEventButtonLabel => changedWithHistory == null ? "Create" : "Destroy";
 
         /// <summary>
         /// Changed Event triggered when the Variable value gets changed.
@@ -122,7 +106,7 @@ namespace UnityAtoms
         [SerializeField]
         [PropertyOrder(6)]
         [InlineButton(nameof(CreateNestedChangedEvent), "$ChangedEventButtonLabel")]
-        private E1 _changed;
+        private E1 changed;
 
         /// <summary>
         /// Changed with history Event triggered when the Variable value gets changed.
@@ -130,9 +114,9 @@ namespace UnityAtoms
         [SerializeField]
         [PropertyOrder(7)]
         [InlineButton(nameof(CreateNestedChangedWithHistoryEvent), "$ChangedWithHistoryEventButtonLabel")]
-        private E2 _changedWithHistory;
+        private E2 changedWithHistory;
 
-        private T _oldValue;
+        private T oldValue;
 
         /// <summary>
         /// When setting the value of a Variable the new value will be piped through all the pre change transformers, which allows you to create custom logic and restriction on for example what values can be set for this Variable.
@@ -140,33 +124,40 @@ namespace UnityAtoms
         /// <value>Get the list of pre change transformers.</value>
         public List<F> PreChangeTransformers
         {
-            get => _preChangeTransformers;
-            set
+            get
             {
                 CheckInstancing();
+
+                return preChangeTransformers;
+            }
+            set
+            {
+                if (!CheckInstancing())
+                    return;
+
                 if (value == null)
                 {
-                    _preChangeTransformers.Clear();
+                    preChangeTransformers.Clear();
                 }
                 else
                 {
-                    _preChangeTransformers = value;
+                    preChangeTransformers = value;
                 }
             }
         }
 
-        [SerializeField] [PropertyOrder(8)] private List<F> _preChangeTransformers = new List<F>();
+        [SerializeField] [PropertyOrder(8)] private List<F> preChangeTransformers = new List<F>();
 
         protected abstract bool ValueEquals(T other);
 
         private void OnValidate()
         {
-            _value = RunPreChangeTransformers(_value);
+            value = RunPreChangeTransformers(value);
 
-            if (_changed != null && _changed.RequiresInstancing != RequiresInstancing)
+            if (changed != null && changed.RequiresInstancing != RequiresInstancing)
                 Debug.LogError("Variable Event instancing settings doesn't match with variable", this);
 
-            if (_changedWithHistory != null && _changedWithHistory.RequiresInstancing != RequiresInstancing)
+            if (changedWithHistory != null && changedWithHistory.RequiresInstancing != RequiresInstancing)
                 Debug.LogError("Variable Event instancing settings doesn't match with variable", this);
         }
 
@@ -177,29 +168,30 @@ namespace UnityAtoms
         /// <returns>`true` if the value got changed, otherwise `false`.</returns>
         public bool SetValue(T newValue)
         {
-            CheckInstancing();
+            if (!CheckInstancing())
+                return false;
 
             var preProcessedNewValue = RunPreChangeTransformers(newValue);
 
             if (!ValueEquals(preProcessedNewValue))
             {
-                _value = preProcessedNewValue;
+                value = preProcessedNewValue;
 
                 if (Changed != null)
                 {
-                    Changed.Invoke(_value);
+                    Changed.Invoke(value);
                 }
 
                 if (ChangedWithHistory != null)
                 {
                     // NOTE: Doing new P() here, even though it is cleaner, generates garbage.
                     var pair = default(P);
-                    pair.Item1 = _oldValue;
-                    pair.Item2 = _value;
+                    pair.Item1 = oldValue;
+                    pair.Item2 = value;
                     ChangedWithHistory.Invoke(pair);
                 }
 
-                _oldValue = _value;
+                oldValue = value;
                 return true;
             }
 
@@ -213,8 +205,6 @@ namespace UnityAtoms
         /// <returns>`true` if the value got changed, otherwise `false`.</returns>
         public bool SetValue(AtomVariable<T, P, E1, E2, F> variable)
         {
-            CheckInstancing();
-
             return SetValue(variable.Value);
         }
 
@@ -226,6 +216,9 @@ namespace UnityAtoms
         /// <returns>The Variable's change Event as an `IObservable&lt;T&gt;`.</returns>
         public IObservable<T> ObserveChange()
         {
+            if (!CheckInstancing())
+                return null;
+
             if (Changed == null)
             {
                 throw new Exception("You must assign a Changed event in order to observe variable changes.");
@@ -240,6 +233,9 @@ namespace UnityAtoms
         /// <returns>The Variable's change Event as an `IObservable&lt;T, T&gt;`.</returns>
         public IObservable<P> ObserveChangeWithHistory()
         {
+            if (!CheckInstancing())
+                return null;
+
             if (ChangedWithHistory == null)
             {
                 throw new Exception("You must assign a ChangedWithHistory event in order to observe variable changes.");
@@ -252,15 +248,15 @@ namespace UnityAtoms
 
         private T RunPreChangeTransformers(T value)
         {
-            if (_preChangeTransformers.Count <= 0)
+            if (preChangeTransformers.Count <= 0)
             {
                 return value;
             }
 
             var preProcessedValue = value;
-            for (var i = 0; i < _preChangeTransformers.Count; ++i)
+            for (var i = 0; i < preChangeTransformers.Count; ++i)
             {
-                var Transformer = _preChangeTransformers[i];
+                var Transformer = preChangeTransformers[i];
                 if (Transformer != null)
                 {
                     preProcessedValue = Transformer.Call(preProcessedValue);
@@ -278,7 +274,8 @@ namespace UnityAtoms
         /// <returns>The event.</returns>
         public E GetEvent<E>() where E : AtomEventBase
         {
-            CheckInstancing();
+            if (!CheckInstancing())
+                return null;
 
             if (typeof(E) == typeof(E1))
                 return (Changed as E);
@@ -295,7 +292,8 @@ namespace UnityAtoms
         /// <typeparam name="E"></typeparam>
         public void SetEvent<E>(E e) where E : AtomEventBase
         {
-            CheckInstancing();
+            if (!CheckInstancing())
+                return;
 
             if (typeof(E) == typeof(E1))
             {
@@ -314,48 +312,48 @@ namespace UnityAtoms
 
         protected override void OnInspectorValueChanged()
         {
-            _value = RunPreChangeTransformers(_value);
+            value = RunPreChangeTransformers(value);
 
             if (Changed != null)
             {
-                Changed.Invoke(_value);
+                Changed.Invoke(value);
             }
 
             if (ChangedWithHistory != null)
             {
                 // NOTE: Doing new P() here, even though it is cleaner, generates garbage.
                 var pair = default(P);
-                pair.Item1 = _oldValue;
-                pair.Item2 = _value;
+                pair.Item1 = oldValue;
+                pair.Item2 = value;
                 ChangedWithHistory.Invoke(pair);
             }
 
-            _oldValue = _value;
+            oldValue = value;
         }
 
         private void CreateNestedChangedEvent()
         {
-            if (_changed == null)
+            if (changed == null)
             {
-                MultiScriptableObject.AddScriptableObject(this, ref _changed, "Changed");
-                _changed.RequiresInstancing = RequiresInstancing;
+                MultiScriptableObject.AddScriptableObject(this, ref changed, "Changed");
+                changed.RequiresInstancing = RequiresInstancing;
             }
             else
             {
-                MultiScriptableObject.RemoveScriptableObject(this, _changed);
+                MultiScriptableObject.RemoveScriptableObject(this, changed);
             }
         }
 
         private void CreateNestedChangedWithHistoryEvent()
         {
-            if (_changedWithHistory == null)
+            if (changedWithHistory == null)
             {
-                MultiScriptableObject.AddScriptableObject(this, ref _changedWithHistory, "Changed With History");
-                _changedWithHistory.RequiresInstancing = RequiresInstancing;
+                MultiScriptableObject.AddScriptableObject(this, ref changedWithHistory, "Changed With History");
+                changedWithHistory.RequiresInstancing = RequiresInstancing;
             }
             else
             {
-                MultiScriptableObject.RemoveScriptableObject(this, _changedWithHistory);
+                MultiScriptableObject.RemoveScriptableObject(this, changedWithHistory);
             }
         }
     }

@@ -14,43 +14,43 @@ namespace UnityAtoms.BaseAtoms
         /// <summary>
         /// Get or set the Added Action.
         /// </summary>
-        public Action<AtomBaseVariable> Added { get => _added; set => _added = value; }
+        public Action<AtomBaseVariable> Added { get => added; set => added = value; }
 
         /// <summary>
         /// Get or set the Removed Action.
         /// </summary>
-        public Action<AtomBaseVariable> Removed { get => _removed; set => _removed = value; }
+        public Action<AtomBaseVariable> Removed { get => removed; set => removed = value; }
 
         /// <summary>
         /// Get or set the Cleared Action.
         /// </summary>
-        public Action Cleared { get => _cleared; set => _cleared = value; }
+        public Action Cleared { get => cleared; set => cleared = value; }
 
-        private event Action<AtomBaseVariable> _added;
-        private event Action<AtomBaseVariable> _removed;
-        private event Action _cleared;
+        private event Action<AtomBaseVariable> added;
+        private event Action<AtomBaseVariable> removed;
+        private event Action cleared;
 
         [SerializeField, InlineEditor(InlineEditorModes.FullEditor, DrawHeader = false)]
-        private List<AtomBaseVariable> _serializedList = new List<AtomBaseVariable>();
+        private List<AtomBaseVariable> serializedList = new List<AtomBaseVariable>();
 
         public void OnAfterDeserialize()
         {
-            if (_serializedList != null)
+            if (serializedList != null)
             {
                 base.Clear();
-                for (var i = 0; i < _serializedList.Count; ++i)
+                for (var i = 0; i < serializedList.Count; ++i)
                 {
-                    base.Add(_serializedList[i]);
+                    base.Add(serializedList[i]);
                 }
             }
         }
 
         public void OnBeforeSerialize()
         {
-            _serializedList.Clear();
+            serializedList.Clear();
             for (var i = 0; i < this.Count; ++i)
             {
-                _serializedList.Add(this[i]);
+                serializedList.Add(this[i]);
             }
         }
 
@@ -84,7 +84,7 @@ namespace UnityAtoms.BaseAtoms
         public new void Add(AtomBaseVariable item)
         {
             base.Add(item);
-            _serializedList.Add(item);
+            serializedList.Add(item);
             Added?.Invoke(item);
         }
 
@@ -96,7 +96,7 @@ namespace UnityAtoms.BaseAtoms
         public new bool Remove(AtomBaseVariable item)
         {
             var removed = base.Remove(item);
-            _serializedList.Remove(item);
+            serializedList.Remove(item);
             if (!removed) return false;
             Removed?.Invoke(item);
             return true;
@@ -110,7 +110,7 @@ namespace UnityAtoms.BaseAtoms
         {
             var item = this[index];
             base.RemoveAt(index);
-            _serializedList.RemoveAt(index);
+            serializedList.RemoveAt(index);
             Removed?.Invoke(item);
         }
 
@@ -122,7 +122,7 @@ namespace UnityAtoms.BaseAtoms
         public new void Insert(int index, AtomBaseVariable item)
         {
             this.Insert(index, item);
-            _serializedList.Insert(index, item);
+            serializedList.Insert(index, item);
             Added?.Invoke(item);
         }
 
@@ -132,8 +132,8 @@ namespace UnityAtoms.BaseAtoms
         public new void Clear()
         {
             base.Clear();
-            _serializedList.Clear();
-            _cleared?.Invoke();
+            serializedList.Clear();
+            cleared?.Invoke();
         }
     }
 }

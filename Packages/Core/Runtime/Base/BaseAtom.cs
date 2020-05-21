@@ -14,25 +14,34 @@ namespace UnityAtoms
         /// </summary>
         [SerializeField]
         [Multiline]
-        [PropertyOrder(0)]
-        private string _developerDescription;
+        [PropertyOrder(-5)]
+        private string developerDescription;
 
-        [SerializeField]
-        [PropertyOrder(1)]
-        private bool _requiresInstancing;
+        [SerializeField] [PropertyOrder(-4)] private bool requiresInstancing;
 
         public bool RequiresInstancing
         {
-            get => _requiresInstancing;
-            internal set => _requiresInstancing = value;
+            get => requiresInstancing;
+            internal set => requiresInstancing = value;
         }
 
         internal bool IsInMemoryInstance { get; set; }
 
-        protected void CheckInstancing()
+        protected bool CheckInstancing()
         {
-            if(RequiresInstancing && !IsInMemoryInstance)
-                throw new InvalidOperationException("This atom is designed to be instanced. You cannot interact with original object");
+            // Do not spam the editor. Only log when playing.
+            // In edit mode, there will be error box in inspector
+            if (RequiresInstancing && !IsInMemoryInstance)
+            {
+                // if (Application.isPlaying)
+                Debug.LogError($"Atom ({name}) is designed to be instanced. " +
+                               $"You cannot interact with original object",
+                    this);
+
+                return false;
+            }
+
+            return true;
         }
     }
 }

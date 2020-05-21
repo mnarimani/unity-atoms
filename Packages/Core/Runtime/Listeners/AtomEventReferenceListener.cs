@@ -20,12 +20,12 @@ namespace UnityAtoms
         /// The Event we are listening for as a property.
         /// </summary>
         /// <value>The Event Reference of type `ER`.</value>
-        public override E Event { get => _eventReference.GetEvent<E>(); set => _eventReference.SetEvent<E>(value); }
+        public override E Event { get => eventReference.GetEvent<E>(); set => eventReference.SetEvent<E>(value); }
 
         /// <summary>
         /// The Event Reference that we are listening to.
         /// </summary>
         [SerializeField]
-        private ER _eventReference = default(ER);
+        private ER eventReference = default(ER);
     }
 }

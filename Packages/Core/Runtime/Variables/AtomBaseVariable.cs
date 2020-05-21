@@ -15,12 +15,14 @@ namespace UnityAtoms
             get
             {
                 CheckInstancing();
-                return _id;
+                return id;
             }
             set
             {
-                CheckInstancing();
-                _id = value;
+                if (CheckInstancing() == false)
+                    return;
+
+                id = value;
             }
         }
 
@@ -30,14 +32,14 @@ namespace UnityAtoms
         /// <value>The Variable value as an `object`.</value>
         public abstract object BaseValue { get; set; }
 
-        public abstract AtomEventBase BaseChanged { get; set; }
+        internal abstract AtomEventBase BaseChanged { get; set; }
 
-        public abstract AtomEventBase BaseChangedWithHistory { get; set; }
+        internal abstract AtomEventBase BaseChangedWithHistory { get; set; }
 
         [PropertyOrder(1)]
         [Space]
         [SerializeField]
-        private String _id = default;
+        private String id = default;
     }
 
     /// <summary>
@@ -53,23 +55,17 @@ namespace UnityAtoms
         /// <value>The Variable value as an `object`.</value>
         public override object BaseValue
         {
-            get
-            {
-                return _value;
-            }
-            set
-            {
-                Value = (T)value;
-            }
+            get { return value; }
+            set { Value = (T) value; }
         }
 
-        public override AtomEventBase BaseChanged
+        internal override AtomEventBase BaseChanged
         {
             get => throw new NotImplementedException();
             set => throw new NotImplementedException();
         }
 
-        public override AtomEventBase BaseChangedWithHistory
+        internal override AtomEventBase BaseChangedWithHistory
         {
             get => throw new NotImplementedException();
             set => throw new NotImplementedException();
@@ -79,12 +75,20 @@ namespace UnityAtoms
         /// The Variable value as a property.
         /// </summary>
         /// <returns>Get or set the Variable value.</returns>
-        public virtual T Value { get { return _value; } set { throw new NotImplementedException(); } }
+        public virtual T Value
+        {
+            get
+            {
+                CheckInstancing();
+                return value;
+            }
+            set => throw new NotImplementedException();
+        }
 
         [SerializeField]
         [PropertyOrder(3)]
         [OnValueChanged(nameof(OnInspectorValueChanged))]
-        protected T _value = default(T);
+        protected T value;
 
         /// <summary>
         /// Determines equality between Variables.

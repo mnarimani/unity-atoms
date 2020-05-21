@@ -18,12 +18,12 @@ namespace UnityAtoms
         /// The Event we are listening for as a property.
         /// </summary>
         /// <value>The Event of type `E`.</value>
-        public override E Event { get => _event; set => _event = value; }
+        public override E Event { get => targetEvent; set => targetEvent = value; }
 
         /// <summary>
         /// The Event that we are listening to.
         /// </summary>
         [SerializeField]
-        private E _event = null;
+        private E targetEvent = null;
     }
 }

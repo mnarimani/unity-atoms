@@ -7,7 +7,7 @@ namespace UnityAtoms
     /// None generic base class of Lists. Inherits from `BaseAtom`.
     /// </summary>
     [EditorIcon("atom-icon-piglet")]
-    public abstract class BaseAtomValueList : BaseAtom, IWithCollectionEventsBase
+    public abstract class BaseAtomValueList : BaseAtom
     {
         private string ClearedButtonLabel => Cleared == null ? "Create" : "Destroy";
 
@@ -19,19 +19,11 @@ namespace UnityAtoms
 
         protected abstract IList IList { get; }
 
-        public virtual AtomEventBase BaseAdded
-        {
-            get => throw new System.NotImplementedException();
-            set => throw new System.NotImplementedException();
-        }
+        internal abstract AtomEventBase BaseAdded { get; set; }
 
-        public virtual AtomEventBase BaseRemoved
-        {
-            get => throw new System.NotImplementedException();
-            set => throw new System.NotImplementedException();
-        }
+        internal abstract AtomEventBase BaseRemoved { get; set; }
 
-        AtomEventBase IWithCollectionEventsBase.BaseCleared
+        internal AtomEventBase BaseCleared
         {
             get => Cleared;
             set => Cleared = value;

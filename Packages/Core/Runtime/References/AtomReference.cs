@@ -51,7 +51,7 @@ namespace UnityAtoms
                         return instancedVariable.Value;
                     }
                     case AtomReferenceUsage.Value:
-                        return _value;
+                        return value;
                     default:
                         throw new ArgumentOutOfRangeException(nameof(Usage));
                 }
@@ -67,7 +67,7 @@ namespace UnityAtoms
                     }
                     case AtomReferenceUsage.Value:
                     {
-                        _value = value;
+                        this.value = value;
                         break;
                     }
                     case AtomReferenceUsage.VariableInstancer:
@@ -88,7 +88,7 @@ namespace UnityAtoms
         ///     Value used if `Usage` is set to `Value`.
         /// </summary>
         [SerializeField]
-        private T _value = default(T);
+        private T value = default(T);
 
         /// <summary>
         ///     Constant used if `Usage` is set to `Constant`.
@@ -120,7 +120,7 @@ namespace UnityAtoms
             set => variable = value;
         }
 
-        public AtomInstancer VariableInstancer
+        public AtomInstancer Instancer
         {
             get => instancer;
             set => instancer = value;
@@ -134,7 +134,7 @@ namespace UnityAtoms
         protected AtomReference(T value) : this()
         {
             Usage = AtomReferenceUsage.Value;
-            _value = value;
+            this.value = value;
         }
 
         protected abstract bool ValueEquals(T other);

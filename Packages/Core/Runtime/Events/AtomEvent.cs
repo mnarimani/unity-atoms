@@ -14,14 +14,18 @@ namespace UnityAtoms
     {
         public T InspectorRaiseValue
         {
-            get => _inspectorRaiseValue;
+            get
+            {
+                CheckInstancing();
+                return inspectorRaiseValue;
+            }
         }
 
-        protected List<Action<T>> _onEvent;
+        protected List<Action<T>> OnEvent = new List<Action<T>>();
 
         private void OnDisable()
         {
-            _onEvent.Clear();
+            OnEvent.Clear();
         }
 
         /// <summary>
@@ -29,7 +33,7 @@ namespace UnityAtoms
         /// </summary>
         [SerializeField]
         [Tooltip("Value that will be used when using the Raise button in the editor inspector.")]
-        private T _inspectorRaiseValue;
+        private T inspectorRaiseValue;
 
         /// <summary>
         /// Raise the Event.
@@ -39,7 +43,7 @@ namespace UnityAtoms
         {
             base.Invoke();
 
-            foreach (Action<T> action in _onEvent)
+            foreach (Action<T> action in OnEvent)
             {
                 try
                 {
@@ -54,7 +58,7 @@ namespace UnityAtoms
 
         [Button("Raise")]
         [DisableInEditorMode]
-        private void RaiseEditor() => Invoke(_inspectorRaiseValue);
+        private void RaiseEditor() => Invoke(inspectorRaiseValue);
 
         /// <summary>
         /// Register handler to be called when the Event triggers.
@@ -62,8 +66,10 @@ namespace UnityAtoms
         /// <param name="action">The handler.</param>
         public void AddListener(Action<T> action)
         {
-            CheckInstancing();
-            _onEvent.Add(action);
+            if (!CheckInstancing())
+                return;
+
+            OnEvent.Add(action);
         }
 
         /// <summary>
@@ -72,8 +78,10 @@ namespace UnityAtoms
         /// <param name="action">The handler.</param>
         public void RemoveListener(Action<T> action)
         {
-            CheckInstancing();
-            _onEvent.Remove(action);
+            if (!CheckInstancing())
+                return;
+
+            OnEvent.Remove(action);
         }
 
         /// <summary>
@@ -81,8 +89,10 @@ namespace UnityAtoms
         /// </summary>
         public void RemoveAllListeners()
         {
-            CheckInstancing();
-            _onEvent = null;
+            if (!CheckInstancing())
+                return;
+
+            OnEvent = null;
         }
 
         /// <summary>
@@ -91,8 +101,10 @@ namespace UnityAtoms
         /// <param name="listener">The Listener to register.</param>
         public void AddListener(IAtomListener<T> listener, bool replayEventsBuffer = true)
         {
-            CheckInstancing();
-            _onEvent.Add(listener.OnEventRaised);
+            if (!CheckInstancing())
+                return;
+
+            OnEvent.Add(listener.OnEventRaised);
         }
 
         /// <summary>
@@ -101,8 +113,10 @@ namespace UnityAtoms
         /// <param name="listener">The Listener to unregister.</param>
         public void RemoveListener(IAtomListener<T> listener)
         {
-            CheckInstancing();
-            _onEvent.Remove(listener.OnEventRaised);
+            if (!CheckInstancing())
+                return;
+
+            OnEvent.Remove(listener.OnEventRaised);
         }
 
         #region Observable
@@ -113,6 +127,9 @@ namespace UnityAtoms
         /// <returns>The Event as an `IObservable&lt;T&gt;`.</returns>
         public IObservable<T> Observe()
         {
+            if (!CheckInstancing())
+                return null;
+
             return new ObservableEvent<T>(AddListener, RemoveListener);
         }
 

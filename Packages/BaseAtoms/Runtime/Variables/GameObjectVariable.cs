@@ -12,7 +12,7 @@ namespace UnityAtoms.BaseAtoms
     {
         protected override bool ValueEquals(GameObject other)
         {
-            return (_value == null && other == null) || _value != null && other != null && _value.GetInstanceID() == other.GetInstanceID();
+            return (value == null && other == null) || value != null && other != null && value.GetInstanceID() == other.GetInstanceID();
         }
     }
 }

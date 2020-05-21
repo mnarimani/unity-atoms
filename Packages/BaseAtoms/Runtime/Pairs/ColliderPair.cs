@@ -8,13 +8,13 @@ namespace UnityAtoms.BaseAtoms
     [Serializable]
     public struct ColliderPair : IPair<Collider>
     {
-        public Collider Item1 { get => _item1; set => _item1 = value; }
-        public Collider Item2 { get => _item2; set => _item2 = value; }
+        public Collider Item1 { get => item1; set => item1 = value; }
+        public Collider Item2 { get => item2; set => item2 = value; }
 
         [SerializeField]
-        private Collider _item1;
+        private Collider item1;
         [SerializeField]
-        private Collider _item2;
+        private Collider item2;
 
         public void Deconstruct(out Collider item1, out Collider item2) { item1 = Item1; item2 = Item2; }
     }

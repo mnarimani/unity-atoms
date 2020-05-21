@@ -17,7 +17,9 @@ namespace UnityAtoms
 
         public virtual void Invoke()
         {
-            CheckInstancing();
+            if (!CheckInstancing())
+                return;
+
             foreach (Action action in OnEventNoValue)
             {
                 try
@@ -37,7 +39,9 @@ namespace UnityAtoms
         /// <param name="del">The handler.</param>
         public void AddListener(Action del)
         {
-            CheckInstancing();
+            if (!CheckInstancing())
+                return;
+
             OnEventNoValue.Add(del);
         }
 
@@ -47,7 +51,9 @@ namespace UnityAtoms
         /// <param name="del">The handler.</param>
         public void RemoveListener(Action del)
         {
-            CheckInstancing();
+            if (!CheckInstancing())
+                return;
+
             // TODO: Does it throw exception if del doesn't exist?
             OnEventNoValue.Remove(del);
         }
@@ -58,7 +64,9 @@ namespace UnityAtoms
         /// <param name="listener">The Listener to register.</param>
         public void AddListener(IAtomListener listener)
         {
-            CheckInstancing();
+            if (!CheckInstancing())
+                return;
+
             OnEventNoValue.Add(listener.OnEventRaised);
         }
 
@@ -68,7 +76,9 @@ namespace UnityAtoms
         /// <param name="listener">The Listener to unregister.</param>
         public void RemoveListener(IAtomListener listener)
         {
-            CheckInstancing();
+            if (!CheckInstancing())
+                return;
+
             OnEventNoValue.Remove(listener.OnEventRaised);
         }
 

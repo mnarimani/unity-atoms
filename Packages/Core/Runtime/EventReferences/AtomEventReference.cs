@@ -1,4 +1,5 @@
 using System;
+using Sirenix.OdinInspector.Editor;
 using UnityEngine;
 
 namespace UnityAtoms
@@ -24,22 +25,22 @@ namespace UnityAtoms
             {
                 switch (Usage)
                 {
-                    case AtomEventReferenceUsage.VARIABLE:
+                    case AtomEventReferenceUsage.Variable:
                     {
-                        return _variable.GetEvent<E>();
+                        return variable.GetEvent<E>();
                     }
-                    case AtomEventReferenceUsage.VARIABLE_INSTANCER:
+                    case AtomEventReferenceUsage.VariableInstancer:
                     {
-                        V v = instancer.GetInstance(_variable);
+                        V v = Instancer.GetInstance(variable);
                         return v.GetEvent<E>();
                     }
-                    case AtomEventReferenceUsage.EVENT_INSTANCER:
+                    case AtomEventReferenceUsage.EventInstancer:
                     {
-                        return instancer.GetInstance(_event);
+                        return Instancer.GetInstance(RawEvent);
                     }
-                    case AtomEventReferenceUsage.EVENT:
+                    case AtomEventReferenceUsage.Event:
                     {
-                        return _event;
+                        return RawEvent;
                     }
                     default:
                     {
@@ -51,20 +52,20 @@ namespace UnityAtoms
             {
                 switch (Usage)
                 {
-                    case AtomEventReferenceUsage.VARIABLE:
+                    case AtomEventReferenceUsage.Variable:
                     {
-                        _variable.SetEvent(value);
+                        variable.SetEvent(value);
                         break;
                     }
-                    case AtomEventReferenceUsage.VARIABLE_INSTANCER:
+                    case AtomEventReferenceUsage.VariableInstancer:
                     {
-                        V instancedVariable = instancer.GetInstance(_variable);
+                        V instancedVariable = Instancer.GetInstance(variable);
                         instancedVariable.SetEvent(value);
                         break;
                     }
-                    case AtomEventReferenceUsage.EVENT:
+                    case AtomEventReferenceUsage.Event:
                     {
-                        _event = value;
+                        RawEvent = value;
                         break;
                     }
                     default:
@@ -77,11 +78,17 @@ namespace UnityAtoms
         ///     Variable used if `Usage` is set to `Variable`.
         /// </summary>
         [SerializeField]
-        private V _variable = default(V);
+        private V variable = default(V);
+
+        public V Variable
+        {
+            get => variable;
+            set => variable = value;
+        }
 
         protected AtomEventReference()
         {
-            Usage = AtomEventReferenceUsage.EVENT;
+            Usage = AtomEventReferenceUsage.Event;
         }
     }
 }

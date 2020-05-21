@@ -84,11 +84,7 @@ namespace UnityAtoms.Editor
             templateName: "UA_Template__SetVariableValue.txt",
             relativeFileNameAndPath: Path.Combine(Runtime.IsUnityAtomsRepo ? "Runtime" : "", "Actions", "SetVariableValue", $"Set{{VALUE_TYPE_NAME}}VariableValue.cs")
         );
-        public static readonly AtomType SYNC_VARIABLE_INSTANCER_TO_COLLECTION = new AtomType(
-            displayName: "Sync Variable Instancer To Collection",
-            templateName: "UA_Template__SyncVariableInstancerToCollection.txt",
-            relativeFileNameAndPath: Path.Combine(Runtime.IsUnityAtomsRepo ? "Runtime" : "", "SyncVariableInstancerToCollection", $"Sync{{VALUE_TYPE_NAME}}VariableInstancerToCollection.cs")
-        );
+
         public static readonly AtomType UNITY_EVENT = new AtomType(
             displayName: "Unity Event",
             templateName: "UA_Template__UnityEvent.txt"
@@ -110,20 +106,7 @@ namespace UnityAtoms.Editor
             templateName: "UA_Template__FunctionTT.txt",
             relativeFileNameAndPath: Path.Combine(Runtime.IsUnityAtomsRepo ? "Runtime" : "", "Functions", $"{{VALUE_TYPE_NAME}}{{VALUE_TYPE_NAME}}Function.cs")
         );
-        public static readonly AtomType VARIABLE_INSTANCER = new AtomType(
-            displayName: "Variable Instancer",
-            name: "VariableInstancer",
-            templateName: "UA_Template__VariableInstancer.txt"
-        );
-        public static readonly AtomType EVENT_INSTANCER = new AtomType(
-            displayName: "Event Instancer",
-            templateName: "UA_Template__EventInstancer.txt"
-        );
-        public static readonly AtomType PAIR_EVENT_INSTANCER = new AtomType(
-            displayName: "Pair Event Instancer",
-            name: "EventInstancer",
-            templateName: "UA_Template__EventInstancer.txt"
-        );
+
         public static readonly AtomType PAIR = new AtomType(
             displayName: "Pair",
             templateName: "UA_Template__Pair.txt"
@@ -146,14 +129,10 @@ namespace UnityAtoms.Editor
             AtomTypes.EVENT_REFERENCE,
             AtomTypes.PAIR_EVENT_REFERENCE,
             AtomTypes.SET_VARIABLE_VALUE,
-            AtomTypes.SYNC_VARIABLE_INSTANCER_TO_COLLECTION,
             AtomTypes.UNITY_EVENT,
             AtomTypes.PAIR_UNITY_EVENT,
             AtomTypes.VARIABLE,
             AtomTypes.FUNCTION_T_T,
-            AtomTypes.VARIABLE_INSTANCER,
-            AtomTypes.EVENT_INSTANCER,
-            AtomTypes.PAIR_EVENT_INSTANCER,
             AtomTypes.PAIR
         };
 
@@ -173,26 +152,20 @@ namespace UnityAtoms.Editor
                 AtomTypes.PAIR_EVENT, AtomTypes.PAIR_EVENT_REFERENCE, AtomTypes.PAIR_UNITY_EVENT, AtomTypes.PAIR_ACTION }
             },
             { AtomTypes.REFERENCE, new List<AtomType>() {
-                AtomTypes.CONSTANT, AtomTypes.VARIABLE, AtomTypes.EVENT, AtomTypes.PAIR_EVENT, AtomTypes.FUNCTION_T_T, AtomTypes.VARIABLE_INSTANCER, AtomTypes.PAIR }
+                AtomTypes.CONSTANT, AtomTypes.VARIABLE, AtomTypes.EVENT, AtomTypes.PAIR_EVENT, AtomTypes.FUNCTION_T_T, AtomTypes.PAIR }
             },
-            { AtomTypes.BASE_EVENT_REFERENCE, new List<AtomType>() {AtomTypes.EVENT, AtomTypes.EVENT_INSTANCER }
+            { AtomTypes.BASE_EVENT_REFERENCE, new List<AtomType>() {AtomTypes.EVENT }
             },
-            { AtomTypes.EVENT_REFERENCE, new List<AtomType>() { AtomTypes.VARIABLE, AtomTypes.EVENT, AtomTypes.VARIABLE_INSTANCER, AtomTypes.EVENT_INSTANCER }
+            { AtomTypes.EVENT_REFERENCE, new List<AtomType>() { AtomTypes.VARIABLE, AtomTypes.EVENT }
             },
-            { AtomTypes.PAIR_EVENT_REFERENCE, new List<AtomType>() { AtomTypes.VARIABLE, AtomTypes.PAIR_EVENT, AtomTypes.VARIABLE_INSTANCER, AtomTypes.PAIR_EVENT_INSTANCER }
+            { AtomTypes.PAIR_EVENT_REFERENCE, new List<AtomType>() { AtomTypes.VARIABLE, AtomTypes.PAIR_EVENT }
             },
             { AtomTypes.SET_VARIABLE_VALUE, new List<AtomType>() {
                 AtomTypes.EVENT, AtomTypes.PAIR_EVENT, AtomTypes.FUNCTION_T_T, AtomTypes.VARIABLE, AtomTypes.CONSTANT,
-                AtomTypes.REFERENCE, AtomTypes.VARIABLE_INSTANCER, AtomTypes.PAIR }
-            },
-            { AtomTypes.SYNC_VARIABLE_INSTANCER_TO_COLLECTION, new List<AtomType>() {
-                AtomTypes.VARIABLE, AtomTypes.VARIABLE_INSTANCER }
+                AtomTypes.REFERENCE, AtomTypes.PAIR }
             },
             { AtomTypes.PAIR_UNITY_EVENT, new List<AtomType>() { AtomTypes.PAIR } },
             { AtomTypes.VARIABLE, new List<AtomType>() { AtomTypes.EVENT, AtomTypes.PAIR_EVENT, AtomTypes.FUNCTION_T_T, AtomTypes.PAIR } },
-            { AtomTypes.VARIABLE_INSTANCER, new List<AtomType>() { AtomTypes.VARIABLE, AtomTypes.EVENT, AtomTypes.PAIR_EVENT, AtomTypes.FUNCTION_T_T, AtomTypes.PAIR } },
-            { AtomTypes.EVENT_INSTANCER, new List<AtomType>() { AtomTypes.EVENT } },
-            { AtomTypes.PAIR_EVENT_INSTANCER, new List<AtomType>() { AtomTypes.PAIR_EVENT } }
         };
     }
 }

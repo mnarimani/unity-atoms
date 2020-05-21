@@ -10,7 +10,7 @@ namespace UnityAtoms
 {
 <%IF EQUATABLE%>
     /// <summary>
-    /// Reference of type `{VALUE_TYPE}`. Inherits from `EquatableAtomReference&lt;{VALUE_TYPE}, {VALUE_TYPE_NAME}Pair, {VALUE_TYPE_NAME}Constant, {VALUE_TYPE_NAME}Variable, {VALUE_TYPE_NAME}Event, {VALUE_TYPE_NAME}PairEvent, {VALUE_TYPE_NAME}{VALUE_TYPE_NAME}Function, {VALUE_TYPE_NAME}VariableInstancer, AtomCollection, AtomList&gt;`.
+    /// Reference of type `{VALUE_TYPE}`. Inherits from `EquatableAtomReference&lt;{VALUE_TYPE}, {VALUE_TYPE_NAME}Pair, {VALUE_TYPE_NAME}Constant, {VALUE_TYPE_NAME}Variable, {VALUE_TYPE_NAME}Event, {VALUE_TYPE_NAME}PairEvent, {VALUE_TYPE_NAME}{VALUE_TYPE_NAME}Function, AtomList&gt;`.
     /// </summary>
     [Serializable]
     public sealed class {VALUE_TYPE_NAME}Reference : EquatableAtomReference<
@@ -20,8 +20,7 @@ namespace UnityAtoms
         {VALUE_TYPE_NAME}Variable,
         {VALUE_TYPE_NAME}Event,
         {VALUE_TYPE_NAME}PairEvent,
-        {VALUE_TYPE_NAME}{VALUE_TYPE_NAME}Function,
-        {VALUE_TYPE_NAME}VariableInstancer>, IEquatable<{VALUE_TYPE_NAME}Reference>
+        {VALUE_TYPE_NAME}{VALUE_TYPE_NAME}Function>, IEquatable<{VALUE_TYPE_NAME}Reference>
     {
         public {VALUE_TYPE_NAME}Reference() : base() { }
         public {VALUE_TYPE_NAME}Reference({VALUE_TYPE} value) : base(value) { }
@@ -29,7 +28,7 @@ namespace UnityAtoms
     }
 <%ELSE%>
     /// <summary>
-    /// Reference of type `{VALUE_TYPE}`. Inherits from `AtomReference&lt;{VALUE_TYPE}, {VALUE_TYPE_NAME}Pair, {VALUE_TYPE_NAME}Constant, {VALUE_TYPE_NAME}Variable, {VALUE_TYPE_NAME}Event, {VALUE_TYPE_NAME}PairEvent, {VALUE_TYPE_NAME}{VALUE_TYPE_NAME}Function, {VALUE_TYPE_NAME}VariableInstancer, AtomCollection, AtomList&gt;`.
+    /// Reference of type `{VALUE_TYPE}`. Inherits from `AtomReference&lt;{VALUE_TYPE}, {VALUE_TYPE_NAME}Pair, {VALUE_TYPE_NAME}Constant, {VALUE_TYPE_NAME}Variable, {VALUE_TYPE_NAME}Event, {VALUE_TYPE_NAME}PairEvent, {VALUE_TYPE_NAME}{VALUE_TYPE_NAME}Function, AtomList&gt;`.
     /// </summary>
     [Serializable]
     public sealed class {VALUE_TYPE_NAME}Reference : AtomReference<
@@ -39,8 +38,7 @@ namespace UnityAtoms
         {VALUE_TYPE_NAME}Variable,
         {VALUE_TYPE_NAME}Event,
         {VALUE_TYPE_NAME}PairEvent,
-        {VALUE_TYPE_NAME}{VALUE_TYPE_NAME}Function,
-        {VALUE_TYPE_NAME}VariableInstancer>, IEquatable<{VALUE_TYPE_NAME}Reference>
+        {VALUE_TYPE_NAME}{VALUE_TYPE_NAME}Function>, IEquatable<{VALUE_TYPE_NAME}Reference>
     {
         public {VALUE_TYPE_NAME}Reference() : base() { }
         public {VALUE_TYPE_NAME}Reference({VALUE_TYPE} value) : base(value) { }
@@ -48,7 +46,7 @@ namespace UnityAtoms
         protected override bool ValueEquals({VALUE_TYPE} other)
         {
             throw new NotImplementedException();
-        } 
+        }
     }
 <%ENDIF%>
 }

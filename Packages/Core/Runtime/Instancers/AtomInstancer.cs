@@ -17,9 +17,11 @@ namespace ShipClient.Instancers
 
         public T GetInstance<T>(T atom) where T : BaseAtom
         {
-            if (atom.RequiresInstancing)
+            if (atom.RequiresInstancing == false)
             {
-                Debug.LogError($"Atom {atom.name} is not designed to be instanced");
+                if (Application.isPlaying)
+                    Debug.LogError($"Atom {atom.name} cannot be instanced.");
+
                 return atom;
             }
 
@@ -39,7 +41,7 @@ namespace ShipClient.Instancers
                     vInstance.BaseChangedWithHistory = Instantiate(vOriginal.BaseChangedWithHistory);
             }
 
-            if (atom is IWithCollectionEventsBase listOriginal && newInstance is IWithCollectionEventsBase listInstance)
+            if (atom is BaseAtomValueList listOriginal && newInstance is BaseAtomValueList listInstance)
             {
                 if (listOriginal.BaseCleared != null)
                     listInstance.BaseCleared = Instantiate(listOriginal.BaseCleared);
@@ -51,6 +53,7 @@ namespace ShipClient.Instancers
                     listInstance.BaseRemoved = Instantiate(listOriginal.BaseRemoved);
             }
 
+            newInstance.IsInMemoryInstance = true;
             instances.Add(atom, newInstance);
             return newInstance;
         }

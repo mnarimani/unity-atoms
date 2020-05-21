@@ -11,17 +11,17 @@ namespace UnityAtoms.BaseAtoms
     public class SyncGameObjectToList : MonoBehaviour
     {
         [SerializeField]
-        private GameObjectValueList _list = default;
+        private GameObjectValueList list = default;
 
         void OnEnable()
         {
-            Assert.IsNotNull(_list);
-            _list.Add(gameObject);
+            Assert.IsNotNull(list);
+            list.Add(gameObject);
         }
 
         void OnDestroy()
         {
-            _list.Remove(gameObject);
+            list.Remove(gameObject);
         }
     }
 }

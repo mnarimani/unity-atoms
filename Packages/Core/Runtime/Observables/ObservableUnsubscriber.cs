@@ -5,20 +5,20 @@ namespace UnityAtoms
 {
     public class ObservableUnsubscriber<T> : IDisposable
     {
-        private List<IObserver<T>> _observers;
-        private IObserver<T> _observer;
+        private List<IObserver<T>> observers;
+        private IObserver<T> observer;
 
         public ObservableUnsubscriber(List<IObserver<T>> observers, IObserver<T> observer)
         {
-            this._observers = observers;
-            this._observer = observer;
+            this.observers = observers;
+            this.observer = observer;
         }
 
         public void Dispose()
         {
-            if (_observer != null && _observers.Contains(_observer))
+            if (observer != null && observers.Contains(observer))
             {
-                _observers.Remove(_observer);
+                observers.Remove(observer);
             }
         }
     }

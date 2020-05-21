@@ -1,15 +1,13 @@
 ﻿using System;
-using System.ComponentModel;
+using ShipClient.Instancers;
 using Sirenix.OdinInspector.Editor;
-using Sirenix.Utilities;
 using Sirenix.Utilities.Editor;
-using UnityAtoms;
 using UnityEditor;
 using UnityEngine;
 
-namespace ShipClient.Drawers
+namespace UnityAtoms.Editor.Drawers
 {
-    public class AtomVariableReferenceDrawer<Target, T, P, C, V, E1, E2, F> : OdinValueDrawer<Target>
+    public class AtomVariableReferenceDrawer<Target, T, P, C, V, E1, E2, F> : BaseReferenceDrawer<Target>
         where Target : AtomReference<T, P, C, V, E1, E2, F>
         where P : struct, IPair<T>
         where C : AtomBaseVariable<T>
@@ -30,53 +28,85 @@ namespace ShipClient.Drawers
 
             Target value = ValueEntry.SmartValue;
 
-            SirenixEditorGUI.BeginHorizontalPropertyLayout(label);
-            // EditorGUILayout.BeginHorizontal();
-            // if (label != null)
-                // EditorGUILayout.PrefixLabel(label);
+            InspectorProperty field = GetInspectorProperty();
 
-            value.Usage = (AtomReferenceUsage) EditorGUILayout.EnumPopup(value.Usage, popupStyle, GUILayout.Width(18));
-            InspectorProperty variable = Property.FindChild(x => x.Name == "variable", false);
-            // variable.Tree.Draw(true);
-            SirenixEditorGUI.EndHorizontalPropertyLayout();
-            // EditorGUILayout.EndHorizontal();
-            variable.Draw(null);
+            CheckInstancing();
 
-            // Rect optionsRect = new Rect(rect.x, rect.y, 18, rect.height);
-            // Rect valueRect = rect.AddXMin(18);
-            //
-            //
-            // switch (value.Usage)
-            // {
-            //     case AtomReferenceUsage.Value:
-            //        value.Value = SirenixEditorGUI.
-            //         break;
-            //     case AtomReferenceUsage.Constant:
-            //         value.Constant = (C) SirenixEditorFields.UnityObjectField(valueRect,
-            //             value.Constant,
-            //             typeof(C),
-            //             false);
-            //         break;
-            //     case AtomReferenceUsage.VariableInstancer:
-            //     case AtomReferenceUsage.Variable:
-            //         value.Variable = (V) SirenixEditorFields.UnityObjectField(valueRect,
-            //             value.Variable,
-            //             typeof(V),
-            //             false);
-            //         break;
-            //     default:
-            //         throw new ArgumentOutOfRangeException();
-            // }
-            //
-            // if (value.Usage == AtomReferenceUsage.VariableInstancer)
-            // {
-            //     InspectorProperty instancer = Property.FindChild(p => p.Name == "instancer", false);
-            //     EditorGUI.indentLevel++;
-            //     instancer.Draw(new GUIContent("Instancer"));
-            //     EditorGUI.indentLevel--;
-            // }
+            EditorGUILayout.BeginHorizontal();
+
+            if (label != null)
+                EditorGUILayout.PrefixLabel(label);
+
+            value.Usage = (AtomReferenceUsage) EditorGUILayout.EnumPopup(value.Usage, GUILayout.Width(20));
+
+            field.Draw(null);
+
+            EditorGUILayout.EndHorizontal();
+
+            if (value.Usage == AtomReferenceUsage.VariableInstancer)
+            {
+                DrawInstancer();
+            }
 
             ValueEntry.SmartValue = value;
+        }
+
+        private void CheckInstancing()
+        {
+            Target value = ValueEntry.SmartValue;
+
+            if (value.Usage == AtomReferenceUsage.VariableInstancer)
+            {
+                if (value.Variable != null)
+                {
+                    if (value.Variable.RequiresInstancing == false)
+                    {
+                        SirenixEditorGUI.ErrorMessageBox($"Variable {value.Variable.name} cannot be instanced.");
+                    }
+                }
+            }
+
+            if (value.Usage == AtomReferenceUsage.Variable)
+            {
+                if (value.Variable != null)
+                {
+                    if (value.Variable.RequiresInstancing)
+                    {
+                        SirenixEditorGUI.ErrorMessageBox(
+                            $"Variable {value.Variable.name} should be used with AtomInstancer. Use Reference classes instead of raw Event to declare your field. And set the usage to 'Variable Instancer'");
+                    }
+                }
+            }
+        }
+
+        private InspectorProperty GetInspectorProperty()
+        {
+            InspectorProperty field;
+
+            switch (ValueEntry.SmartValue.Usage)
+            {
+                case AtomReferenceUsage.Value:
+                    field = Property.FindChild(x => x.Name == "value", false);
+                    break;
+                case AtomReferenceUsage.Constant:
+                    field = Property.FindChild(x => x.Name == "constant", false);
+                    break;
+                case AtomReferenceUsage.Variable:
+                    field = Property.FindChild(x => x.Name == "variable", false);
+                    break;
+                case AtomReferenceUsage.VariableInstancer:
+                    field = Property.FindChild(x => x.Name == "variable", false);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            return field;
+        }
+
+        protected override void SetInstancerForValueEntry(int entryIndex, AtomInstancer instancer)
+        {
+            ValueEntry.Values[entryIndex].Instancer = instancer;
         }
     }
 }

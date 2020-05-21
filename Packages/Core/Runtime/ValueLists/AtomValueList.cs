@@ -49,13 +49,13 @@ namespace UnityAtoms
         /// </summary>
         public bool IsReadOnly => false;
 
-        public override AtomEventBase BaseAdded
+        internal override AtomEventBase BaseAdded
         {
             get => Added;
             set => Added = (E) value;
         }
-        
-        public override AtomEventBase BaseRemoved
+
+        internal override AtomEventBase BaseRemoved
         {
             get => Removed;
             set => Removed = (E) value;

@@ -14,7 +14,7 @@ namespace UnityAtoms
         /// </summary>
         [SerializeField]
         [Multiline]
-        private string _developerDescription;
+        private string developerDescription;
     }
 
     /// <summary>
@@ -38,7 +38,7 @@ namespace UnityAtoms
         /// The Unity Event responses.
         /// NOTE: This variable is public due to this bug: https://issuetracker.unity3d.com/issues/events-generated-by-the-player-input-component-do-not-have-callbackcontext-set-as-their-parameter-type. Will be changed back to private when fixed (this could happen in a none major update).
         /// </summary>
-        public UER _unityEventResponse = null;
+        public UER unityEventResponse = null;
 
         /// <summary>
         /// The Action responses;
@@ -46,15 +46,15 @@ namespace UnityAtoms
         /// <typeparam name="A">The Action type.</typeparam>
         /// <returns>A `List&lt;A&gt;` of Actions.</returns>
         [SerializeField]
-        private List<AtomAction> _actionResponses = new List<AtomAction>();
+        private List<AtomAction> actionResponses = new List<AtomAction>();
 
         [SerializeField]
-        private bool _replayEventBufferOnRegister = true;
+        private bool replayEventBufferOnRegister = true;
 
         private void OnEnable()
         {
             if (Event == null) return;
-            Event.AddListener(this, _replayEventBufferOnRegister);
+            Event.AddListener(this, replayEventBufferOnRegister);
         }
 
         private void OnDisable()
@@ -69,10 +69,10 @@ namespace UnityAtoms
         /// <param name="item">The Event type.</param>
         public void OnEventRaised(T item)
         {
-            _unityEventResponse?.Invoke(item);
-            for (int i = 0; _actionResponses != null && i < _actionResponses.Count; ++i)
+            unityEventResponse?.Invoke(item);
+            for (int i = 0; actionResponses != null && i < actionResponses.Count; ++i)
             {
-                var action = _actionResponses[i];
+                var action = actionResponses[i];
 
                 if (action == null) continue;
 

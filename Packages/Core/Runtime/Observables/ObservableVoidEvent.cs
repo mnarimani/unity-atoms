@@ -5,8 +5,8 @@ namespace UnityAtoms
 {
     public class ObservableVoidEvent : IObservable<Void>
     {
-        private Action<Action> _unregister = default(Action<Action>);
-        private List<IObserver<Void>> _observers = new List<IObserver<Void>>();
+        private Action<Action> unregister = default(Action<Action>);
+        private List<IObserver<Void>> observers = new List<IObserver<Void>>();
 
         public ObservableVoidEvent(Action<Action> register, Action<Action> unregister)
         {
@@ -15,24 +15,21 @@ namespace UnityAtoms
 
         ~ObservableVoidEvent()
         {
-            if (_unregister != null)
-            {
-                _unregister(NotifyObservers);
-            }
+            unregister?.Invoke(NotifyObservers);
         }
 
         public IDisposable Subscribe(IObserver<Void> observer)
         {
-            if (!_observers.Contains(observer))
-                _observers.Add(observer);
-            return new ObservableUnsubscriber<Void>(_observers, observer);
+            if (!observers.Contains(observer))
+                observers.Add(observer);
+            return new ObservableUnsubscriber<Void>(observers, observer);
         }
 
         private void NotifyObservers()
         {
-            for (int i = 0; _observers != null && i < _observers.Count; ++i)
+            for (int i = 0; observers != null && i < observers.Count; ++i)
             {
-                _observers[i].OnNext(new Void());
+                observers[i].OnNext(new Void());
             }
         }
     }

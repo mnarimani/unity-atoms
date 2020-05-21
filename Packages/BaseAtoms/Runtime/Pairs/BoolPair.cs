@@ -8,13 +8,13 @@ namespace UnityAtoms.BaseAtoms
     [Serializable]
     public struct BoolPair : IPair<bool>
     {
-        public bool Item1 { get => _item1; set => _item1 = value; }
-        public bool Item2 { get => _item2; set => _item2 = value; }
+        public bool Item1 { get => item1; set => item1 = value; }
+        public bool Item2 { get => item2; set => item2 = value; }
 
         [SerializeField]
-        private bool _item1;
+        private bool item1;
         [SerializeField]
-        private bool _item2;
+        private bool item2;
 
         public void Deconstruct(out bool item1, out bool item2) { item1 = Item1; item2 = Item2; }
     }
