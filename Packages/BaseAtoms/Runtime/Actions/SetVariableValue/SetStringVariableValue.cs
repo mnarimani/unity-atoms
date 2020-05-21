@@ -16,7 +16,6 @@ namespace UnityAtoms.BaseAtoms
         StringReference,
         StringEvent,
         StringPairEvent,
-        StringStringFunction,
-        StringVariableInstancer>
+        StringStringFunction>
     { }
 }

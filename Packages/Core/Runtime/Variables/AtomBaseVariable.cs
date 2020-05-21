@@ -10,13 +10,29 @@ namespace UnityAtoms
     [EditorIcon("atom-icon-teal")]
     public abstract class AtomBaseVariable : BaseAtom
     {
-        public String Id { get => _id; set => _id = value; }
+        public String Id
+        {
+            get
+            {
+                CheckInstancing();
+                return _id;
+            }
+            set
+            {
+                CheckInstancing();
+                _id = value;
+            }
+        }
 
         /// <summary>
         /// The Variable value as an `object`.abstract Beware of boxing! 🥊
         /// </summary>
         /// <value>The Variable value as an `object`.</value>
         public abstract object BaseValue { get; set; }
+
+        public abstract AtomEventBase BaseChanged { get; set; }
+
+        public abstract AtomEventBase BaseChangedWithHistory { get; set; }
 
         [PropertyOrder(1)]
         [Space]
@@ -45,6 +61,18 @@ namespace UnityAtoms
             {
                 Value = (T)value;
             }
+        }
+
+        public override AtomEventBase BaseChanged
+        {
+            get => throw new NotImplementedException();
+            set => throw new NotImplementedException();
+        }
+
+        public override AtomEventBase BaseChangedWithHistory
+        {
+            get => throw new NotImplementedException();
+            set => throw new NotImplementedException();
         }
 
         /// <summary>

@@ -15,8 +15,7 @@ namespace UnityAtoms.BaseAtoms
         ColorVariable,
         ColorEvent,
         ColorPairEvent,
-        ColorColorFunction,
-        ColorVariableInstancer>, IEquatable<ColorReference>
+        ColorColorFunction>, IEquatable<ColorReference>
     {
         public ColorReference() : base() { }
         public ColorReference(Color value) : base(value) { }

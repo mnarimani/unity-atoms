@@ -15,8 +15,7 @@ namespace UnityAtoms.BaseAtoms
         ColliderVariable,
         ColliderEvent,
         ColliderPairEvent,
-        ColliderColliderFunction,
-        ColliderVariableInstancer>, IEquatable<ColliderReference>
+        ColliderColliderFunction>, IEquatable<ColliderReference>
     {
         public ColliderReference() : base() { }
         public ColliderReference(Collider value) : base(value) { }

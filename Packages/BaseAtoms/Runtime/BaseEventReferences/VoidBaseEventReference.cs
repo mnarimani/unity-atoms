@@ -19,8 +19,7 @@ namespace UnityAtoms.BaseAtoms
     [Serializable]
     public sealed class VoidBaseEventReference : AtomBaseEventReference<
         Void,
-        VoidEvent,
-        VoidEventInstancer>, IGetEvent
+        VoidEvent>, IGetEvent
     {
         /// <summary>
         /// Get or set the Event used by the Event Reference.
@@ -30,17 +29,21 @@ namespace UnityAtoms.BaseAtoms
         {
             get
             {
-                switch (_usage)
+                switch (Usage)
                 {
-                    case (VoidBaseEventReferenceUsage.EVENT_INSTANCER): return _eventInstancer != null ? _eventInstancer.Event : null;
+                    case (VoidBaseEventReferenceUsage.EVENT_INSTANCER):
+                    {
+                        return instancer.GetInstance(_event);
+                    }
                     case (VoidBaseEventReferenceUsage.EVENT):
-                    default:
                         return _event;
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(Usage));
                 }
             }
             set
             {
-                switch (_usage)
+                switch (Usage)
                 {
                     case (VoidBaseEventReferenceUsage.LIST_CLEARED_EVENT):
                         {
@@ -53,7 +56,7 @@ namespace UnityAtoms.BaseAtoms
                             break;
                         }
                     default:
-                        throw new NotSupportedException($"Event not reassignable for usage {_usage}.");
+                        throw new NotSupportedException($"Event not reassignable for usage {Usage}.");
                 }
             }
         }

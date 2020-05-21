@@ -14,8 +14,7 @@ namespace UnityAtoms.BaseAtoms
         IntVariable,
         IntEvent,
         IntPairEvent,
-        IntIntFunction,
-        IntVariableInstancer>, IEquatable<IntReference>
+        IntIntFunction>, IEquatable<IntReference>
     {
         public IntReference() : base() { }
         public IntReference(int value) : base(value) { }

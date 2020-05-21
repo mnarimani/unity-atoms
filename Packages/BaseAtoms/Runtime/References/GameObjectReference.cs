@@ -15,8 +15,7 @@ namespace UnityAtoms.BaseAtoms
         GameObjectVariable,
         GameObjectEvent,
         GameObjectPairEvent,
-        GameObjectGameObjectFunction,
-        GameObjectVariableInstancer>, IEquatable<GameObjectReference>
+        GameObjectGameObjectFunction>, IEquatable<GameObjectReference>
     {
         public GameObjectReference() : base() { }
         public GameObjectReference(GameObject value) : base(value) { }

@@ -1,4 +1,5 @@
 using System;
+using ShipClient.Instancers;
 using UnityEngine;
 
 namespace UnityAtoms
@@ -23,7 +24,13 @@ namespace UnityAtoms
         /// Describes how we use the Event Reference.
         /// </summary>
         [SerializeField]
-        protected int _usage;
+        private int usage;
+
+        public int Usage
+        {
+            get => usage;
+            set => usage = value;
+        }
     }
 
     /// <summary>
@@ -32,9 +39,8 @@ namespace UnityAtoms
     /// <typeparam name="T">The type of the event.</typeparam>
     /// <typeparam name="E">Event of type `T`.</typeparam>
     /// <typeparam name="EI">Event Instancer of type `T`.</typeparam>
-    public abstract class AtomBaseEventReference<T, E, EI> : AtomBaseEventReference, IGetEvent, ISetEvent
+    public abstract class AtomBaseEventReference<T, E> : AtomBaseEventReference, IGetEvent, ISetEvent
         where E : AtomEvent<T>
-        where EI : AtomEventInstancer<T, E>
     {
         /// <summary>
         /// Get the event for the Event Reference.
@@ -44,17 +50,19 @@ namespace UnityAtoms
         {
             get
             {
-                switch (_usage)
+                switch (Usage)
                 {
-                    case (AtomEventReferenceUsage.EVENT_INSTANCER): return _eventInstancer.Event;
+                    case (AtomEventReferenceUsage.EVENT_INSTANCER):
+                        return instancer.GetInstance(_event);
                     case (AtomEventReferenceUsage.EVENT):
-                    default:
                         return _event;
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(Usage));
                 }
             }
             set
             {
-                switch (_usage)
+                switch (Usage)
                 {
                     case (AtomEventReferenceUsage.EVENT):
                         {
@@ -62,7 +70,7 @@ namespace UnityAtoms
                             break;
                         }
                     default:
-                        throw new NotSupportedException($"Event not reassignable for usage {_usage}.");
+                        throw new NotSupportedException($"Event not reassignable for usage {Usage}.");
                 }
             }
         }
@@ -77,16 +85,11 @@ namespace UnityAtoms
         /// EventInstancer used if `Usage` is set to `EventInstancer`.
         /// </summary>
         [SerializeField]
-        protected EI _eventInstancer = default(EI);
+        protected AtomInstancer instancer = default(AtomInstancer);
 
         protected AtomBaseEventReference()
         {
-            _usage = AtomEventReferenceUsage.EVENT;
-        }
-
-        public static implicit operator E(AtomBaseEventReference<T, E, EI> reference)
-        {
-            return reference.Event;
+            Usage = AtomEventReferenceUsage.EVENT;
         }
 
         /// <summary>
@@ -103,7 +106,7 @@ namespace UnityAtoms
         }
 
         /// <summary>
-        /// Set event by type. 
+        /// Set event by type.
         /// </summary>
         /// <param name="e">The new event value.</param>
         /// <typeparam name="E"></typeparam>

@@ -26,8 +26,7 @@ namespace UnityAtoms.BaseAtoms
     [Serializable]
     public sealed class AtomBaseVariableBaseEventReference : AtomBaseEventReference<
         AtomBaseVariable,
-        AtomBaseVariableEvent,
-        AtomBaseVariableEventInstancer>, IGetEvent
+        AtomBaseVariableEvent>, IGetEvent
     {
         /// <summary>
         /// Get or set the Event used by the Event Reference.
@@ -37,19 +36,33 @@ namespace UnityAtoms.BaseAtoms
         {
             get
             {
-                switch (_usage)
+                switch (Usage)
                 {
-                    case (AtomBaseVariableEventReferenceUsage.LIST_ADDED_EVENT): return _list != null ? _list.Added : null;
-                    case (AtomBaseVariableEventReferenceUsage.LIST_REMOVED_EVENT): return _list != null ? _list.Removed : null;
-                    case (AtomBaseVariableEventReferenceUsage.EVENT_INSTANCER): return _eventInstancer != null ? _eventInstancer.Event : null;
+                    case (AtomBaseVariableEventReferenceUsage.LIST_ADDED_EVENT):
+                    {
+                        return _list != null ? _list.Added : null;
+                    }
+                    case (AtomBaseVariableEventReferenceUsage.LIST_REMOVED_EVENT):
+                    {
+                        return _list != null ? _list.Removed : null;
+                    }
+                    case (AtomBaseVariableEventReferenceUsage.EVENT_INSTANCER):
+                    {
+                        return instancer.GetInstance(_event);
+                    }
                     case (AtomBaseVariableEventReferenceUsage.EVENT):
-                    default:
+                    {
                         return _event;
+                    }
+                    default:
+                    {
+                        throw new ArgumentOutOfRangeException(nameof(Usage));
+                    }
                 }
             }
             set
             {
-                switch (_usage)
+                switch (Usage)
                 {
                     case (AtomBaseVariableEventReferenceUsage.LIST_ADDED_EVENT):
                         {
@@ -67,7 +80,7 @@ namespace UnityAtoms.BaseAtoms
                             break;
                         }
                     default:
-                        throw new NotSupportedException($"Event not reassignable for usage {_usage}.");
+                        throw new NotSupportedException($"Event not reassignable for usage {Usage}.");
                 }
             }
         }

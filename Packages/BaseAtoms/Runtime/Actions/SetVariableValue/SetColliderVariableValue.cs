@@ -16,7 +16,6 @@ namespace UnityAtoms.BaseAtoms
         ColliderReference,
         ColliderEvent,
         ColliderPairEvent,
-        ColliderColliderFunction,
-        ColliderVariableInstancer>
+        ColliderColliderFunction>
     { }
 }

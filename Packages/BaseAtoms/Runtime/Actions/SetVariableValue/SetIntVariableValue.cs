@@ -16,7 +16,6 @@ namespace UnityAtoms.BaseAtoms
         IntReference,
         IntEvent,
         IntPairEvent,
-        IntIntFunction,
-        IntVariableInstancer>
+        IntIntFunction>
     { }
 }

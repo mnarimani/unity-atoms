@@ -16,7 +16,6 @@ namespace UnityAtoms.BaseAtoms
         BoolReference,
         BoolEvent,
         BoolPairEvent,
-        BoolBoolFunction,
-        BoolVariableInstancer>
+        BoolBoolFunction>
     { }
 }

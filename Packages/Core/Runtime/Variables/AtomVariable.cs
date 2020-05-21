@@ -26,8 +26,16 @@ namespace UnityAtoms
         /// <returns>Get or set the Variable's value.</returns>
         public override T Value
         {
-            get => _value;
-            set => SetValue(value);
+            get
+            {
+                CheckInstancing();
+                return _value;
+            }
+            set
+            {
+                CheckInstancing();
+                SetValue(value);
+            }
         }
 
         /// <summary>
@@ -36,7 +44,39 @@ namespace UnityAtoms
         /// <value>Get the Variable's old value.</value>
         public T OldValue
         {
-            get => _oldValue;
+            get
+            {
+                CheckInstancing();
+                return _oldValue;
+            }
+        }
+
+        public override AtomEventBase BaseChanged
+        {
+            get
+            {
+                CheckInstancing();
+                return _changed;
+            }
+            set
+            {
+                CheckInstancing();
+                _changed = (E1) value;
+            }
+        }
+
+        public override AtomEventBase BaseChangedWithHistory
+        {
+            get
+            {
+                CheckInstancing();
+                return _changedWithHistory;
+            }
+            set
+            {
+                CheckInstancing();
+                _changedWithHistory = (E2) value;
+            }
         }
 
         /// <summary>
@@ -44,8 +84,16 @@ namespace UnityAtoms
         /// </summary>
         public E1 Changed
         {
-            get => _changed;
-            set => _changed = value;
+            get
+            {
+                CheckInstancing();
+                return _changed;
+            }
+            set
+            {
+                CheckInstancing();
+                _changed = value;
+            }
         }
 
         /// <summary>
@@ -53,8 +101,16 @@ namespace UnityAtoms
         /// </summary>
         public E2 ChangedWithHistory
         {
-            get => _changedWithHistory;
-            set => _changedWithHistory = value;
+            get
+            {
+                CheckInstancing();
+                return _changedWithHistory;
+            }
+            set
+            {
+                CheckInstancing();
+                _changedWithHistory = value;
+            }
         }
 
         private string ChangedEventButtonLabel => _changed == null ? "Create" : "Destroy";
@@ -87,6 +143,7 @@ namespace UnityAtoms
             get => _preChangeTransformers;
             set
             {
+                CheckInstancing();
                 if (value == null)
                 {
                     _preChangeTransformers.Clear();
@@ -98,15 +155,19 @@ namespace UnityAtoms
             }
         }
 
-        [SerializeField]
-        [PropertyOrder(8)]
-        private List<F> _preChangeTransformers = new List<F>();
+        [SerializeField] [PropertyOrder(8)] private List<F> _preChangeTransformers = new List<F>();
 
         protected abstract bool ValueEquals(T other);
 
         private void OnValidate()
         {
             _value = RunPreChangeTransformers(_value);
+
+            if (_changed != null && _changed.RequiresInstancing != RequiresInstancing)
+                Debug.LogError("Variable Event instancing settings doesn't match with variable", this);
+
+            if (_changedWithHistory != null && _changedWithHistory.RequiresInstancing != RequiresInstancing)
+                Debug.LogError("Variable Event instancing settings doesn't match with variable", this);
         }
 
         /// <summary>
@@ -116,6 +177,8 @@ namespace UnityAtoms
         /// <returns>`true` if the value got changed, otherwise `false`.</returns>
         public bool SetValue(T newValue)
         {
+            CheckInstancing();
+
             var preProcessedNewValue = RunPreChangeTransformers(newValue);
 
             if (!ValueEquals(preProcessedNewValue))
@@ -150,6 +213,8 @@ namespace UnityAtoms
         /// <returns>`true` if the value got changed, otherwise `false`.</returns>
         public bool SetValue(AtomVariable<T, P, E1, E2, F> variable)
         {
+            CheckInstancing();
+
             return SetValue(variable.Value);
         }
 
@@ -213,6 +278,8 @@ namespace UnityAtoms
         /// <returns>The event.</returns>
         public E GetEvent<E>() where E : AtomEventBase
         {
+            CheckInstancing();
+
             if (typeof(E) == typeof(E1))
                 return (Changed as E);
             if (typeof(E) == typeof(E2))
@@ -228,6 +295,8 @@ namespace UnityAtoms
         /// <typeparam name="E"></typeparam>
         public void SetEvent<E>(E e) where E : AtomEventBase
         {
+            CheckInstancing();
+
             if (typeof(E) == typeof(E1))
             {
                 Changed = (e as E1);
@@ -267,17 +336,27 @@ namespace UnityAtoms
         private void CreateNestedChangedEvent()
         {
             if (_changed == null)
+            {
                 MultiScriptableObject.AddScriptableObject(this, ref _changed, "Changed");
+                _changed.RequiresInstancing = RequiresInstancing;
+            }
             else
+            {
                 MultiScriptableObject.RemoveScriptableObject(this, _changed);
+            }
         }
 
         private void CreateNestedChangedWithHistoryEvent()
         {
             if (_changedWithHistory == null)
+            {
                 MultiScriptableObject.AddScriptableObject(this, ref _changedWithHistory, "Changed With History");
+                _changedWithHistory.RequiresInstancing = RequiresInstancing;
+            }
             else
+            {
                 MultiScriptableObject.RemoveScriptableObject(this, _changedWithHistory);
+            }
         }
     }
 }

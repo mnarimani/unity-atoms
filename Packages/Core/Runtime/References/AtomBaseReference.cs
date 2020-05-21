@@ -1,29 +1,37 @@
+using System;
+using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace UnityAtoms
 {
     /// <summary>
     /// Different Reference usages.
     /// </summary>
-    public class AtomReferenceUsage
+    public enum AtomReferenceUsage
     {
-        public const int VALUE = 0;
-        public const int CONSTANT = 1;
-        public const int VARIABLE = 2;
-        public const int VARIABLE_INSTANCER = 3;
+        Value,
+        Constant,
+        Variable,
+        VariableInstancer,
     }
 
     /// <summary>
     /// None generic base class for `AtomReference&lt;T, C, V, E1, E2, F, VI&gt;`.
     /// </summary>
+    [Serializable]
     public abstract class AtomBaseReference
     {
-        public int Usage { get => _usage; set => _usage = value; }
+        public AtomReferenceUsage Usage
+        {
+            get => usage;
+            set => usage = value;
+        }
 
         /// <summary>
         /// Describes how we use the Reference and where the value comes from.
         /// </summary>
-        [SerializeField]
-        protected int _usage;
+        [SerializeField, EnumPaging]
+        private AtomReferenceUsage usage;
     }
 }

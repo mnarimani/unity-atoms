@@ -19,6 +19,15 @@ namespace UnityAtoms
         private string RemovedButtonLabel => Removed == null ? "Create" : "Destroy";
 
         /// <summary>
+        /// Actual `List&lt;T&gt;`.
+        /// </summary>
+        /// <typeparam name="T">The list item type.</typeparam>
+        /// <returns>The actual `List&lt;T&gt;`.</returns>
+        [SerializeField]
+        [Space]
+        private List<T> list = new List<T>();
+
+        /// <summary>
         /// Event for when something is added to the list.
         /// </summary>
         [InlineButton(nameof(CreateAddedEvent), "$AddedButtonLabel")]
@@ -40,14 +49,18 @@ namespace UnityAtoms
         /// </summary>
         public bool IsReadOnly => false;
 
-        /// <summary>
-        /// Actual `List&lt;T&gt;`.
-        /// </summary>
-        /// <typeparam name="T">The list item type.</typeparam>
-        /// <returns>The actual `List&lt;T&gt;`.</returns>
-        [SerializeField]
-        [Space]
-        private List<T> list = new List<T>();
+        public override AtomEventBase BaseAdded
+        {
+            get => Added;
+            set => Added = (E) value;
+        }
+        
+        public override AtomEventBase BaseRemoved
+        {
+            get => Removed;
+            set => Removed = (E) value;
+        }
+
 
         /// <summary>
         /// Add an item to the list.

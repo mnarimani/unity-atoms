@@ -13,11 +13,22 @@ namespace UnityAtoms
         /// <summary>
         /// Event without value.
         /// </summary>
-        public event Action OnEventNoValue;
+        protected readonly List<Action> OnEventNoValue = new List<Action>();
 
         public virtual void Invoke()
         {
-            OnEventNoValue?.Invoke();
+            CheckInstancing();
+            foreach (Action action in OnEventNoValue)
+            {
+                try
+                {
+                    action?.Invoke();
+                }
+                catch (Exception e)
+                {
+                    Debug.LogException(e);
+                }
+            }
         }
 
         /// <summary>
@@ -26,7 +37,8 @@ namespace UnityAtoms
         /// <param name="del">The handler.</param>
         public void AddListener(Action del)
         {
-            OnEventNoValue += del;
+            CheckInstancing();
+            OnEventNoValue.Add(del);
         }
 
         /// <summary>
@@ -35,7 +47,9 @@ namespace UnityAtoms
         /// <param name="del">The handler.</param>
         public void RemoveListener(Action del)
         {
-            OnEventNoValue -= del;
+            CheckInstancing();
+            // TODO: Does it throw exception if del doesn't exist?
+            OnEventNoValue.Remove(del);
         }
 
         /// <summary>
@@ -44,7 +58,8 @@ namespace UnityAtoms
         /// <param name="listener">The Listener to register.</param>
         public void AddListener(IAtomListener listener)
         {
-            OnEventNoValue += listener.OnEventRaised;
+            CheckInstancing();
+            OnEventNoValue.Add(listener.OnEventRaised);
         }
 
         /// <summary>
@@ -53,22 +68,18 @@ namespace UnityAtoms
         /// <param name="listener">The Listener to unregister.</param>
         public void RemoveListener(IAtomListener listener)
         {
-            OnEventNoValue -= listener.OnEventRaised;
+            CheckInstancing();
+            OnEventNoValue.Remove(listener.OnEventRaised);
         }
 
-        public void OnBeforeSerialize() { }
+        public void OnBeforeSerialize()
+        {
+        }
 
         public virtual void OnAfterDeserialize()
         {
             // Clear all delegates when exiting play mode
-            if (OnEventNoValue != null)
-            {
-                foreach (var d in OnEventNoValue.GetInvocationList())
-                {
-                    OnEventNoValue -= (Action)d;
-                }
-            }
+            OnEventNoValue.Clear();
         }
-
     }
 }
