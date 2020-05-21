@@ -45,7 +45,10 @@ namespace UnityAtoms
                     case AtomReferenceUsage.VariableInstancer:
                     {
                         if (instancer == null)
+                        {
+                            Debug.LogError("Instancer is not assigned.");
                             return default;
+                        }
 
                         V instancedVariable = instancer.GetInstance(variable);
                         return instancedVariable.Value;
@@ -72,12 +75,19 @@ namespace UnityAtoms
                     }
                     case AtomReferenceUsage.VariableInstancer:
                     {
+                        if (instancer == null)
+                        {
+                            Debug.LogError("Instancer is not assigned. Cannot assign value.");
+                            return;
+                        }
+
                         V instancedVariable = instancer.GetInstance(variable);
                         instancedVariable.Value = value;
                         break;
                     }
                     case AtomReferenceUsage.Constant:
-                        throw new NotSupportedException("Can't reassign constant value");
+                        Debug.LogError("Can't reassign constant value");
+                        break;
                     default:
                         throw new ArgumentOutOfRangeException(nameof(Usage));
                 }

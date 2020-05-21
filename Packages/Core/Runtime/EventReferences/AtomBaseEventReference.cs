@@ -9,10 +9,10 @@ namespace UnityAtoms
     /// </summary>
     public enum AtomEventReferenceUsage
     {
-         Event,
-         EventInstancer,
-         Variable,
-         VariableInstancer,
+        Event,
+        EventInstancer,
+        Variable,
+        VariableInstancer,
     }
 
     /// <summary>
@@ -53,7 +53,15 @@ namespace UnityAtoms
                 switch (Usage)
                 {
                     case (AtomEventReferenceUsage.EventInstancer):
+                    {
+                        if (instancer == null)
+                        {
+                            Debug.LogError("Instancer is not assigned.");
+                            return null;
+                        }
+
                         return instancer.GetInstance(targetEvent);
+                    }
                     case (AtomEventReferenceUsage.Event):
                         return targetEvent;
                     default:
@@ -65,10 +73,10 @@ namespace UnityAtoms
                 switch (Usage)
                 {
                     case (AtomEventReferenceUsage.Event):
-                        {
-                            targetEvent = value;
-                            break;
-                        }
+                    {
+                        targetEvent = value;
+                        break;
+                    }
                     default:
                         throw new NotSupportedException($"Event not reassignable for usage {Usage}.");
                 }

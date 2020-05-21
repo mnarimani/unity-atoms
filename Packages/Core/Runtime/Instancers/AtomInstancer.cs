@@ -10,9 +10,16 @@ namespace ShipClient.Instancers
         private readonly Dictionary<BaseAtom, BaseAtom> instances = new Dictionary<BaseAtom, BaseAtom>();
 
 #if UNITY_EDITOR
+
         [ShowInInspector]
         [InlineEditor]
-        private List<BaseAtom> InMemoryInstances => new List<BaseAtom>(instances.Values);
+        [ListDrawerSettings(IsReadOnly = true, Expanded = true)]
+        private List<BaseAtom> InMemoryInstances
+        {
+            get => new List<BaseAtom>(instances.Values);
+            // ReSharper disable once ValueParameterNotUsed
+            set => Debug.LogError("Cannot change list");
+        }
 #endif
 
         public T GetInstance<T>(T atom) where T : BaseAtom
