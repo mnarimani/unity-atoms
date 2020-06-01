@@ -32,6 +32,14 @@ namespace UnityAtoms.Editor.Drawers
 
             CheckInstancing();
 
+            bool isBox = false;
+
+            if (value.Usage == AtomReferenceUsage.VariableInstancer)
+            {
+                isBox = true;
+                SirenixEditorGUI.BeginBox();
+            }
+
             EditorGUILayout.BeginHorizontal();
 
             if (label != null)
@@ -46,6 +54,11 @@ namespace UnityAtoms.Editor.Drawers
             if (value.Usage == AtomReferenceUsage.VariableInstancer)
             {
                 DrawInstancer();
+            }
+
+            if (isBox)
+            {
+                SirenixEditorGUI.EndBox();
             }
 
             ValueEntry.SmartValue = value;

@@ -41,6 +41,16 @@ namespace UnityAtoms
         /// <param name="item">The value associated with the Event.</param>
         public void Invoke(T item)
         {
+            if (OnEventNoValue.Count == 0 && OnEvent.Count == 0)
+            {
+                if (Application.isPlaying)
+                {
+                    Debug.LogWarning($"AtomEvent {name} doesn't have any listeners.");
+                }
+
+                return;
+            }
+
             base.Invoke();
 
             foreach (Action<T> action in OnEvent)

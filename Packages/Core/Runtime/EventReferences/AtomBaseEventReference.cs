@@ -1,6 +1,7 @@
 using System;
 using ShipClient.Instancers;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace UnityAtoms
 {
@@ -26,7 +27,7 @@ namespace UnityAtoms
         [SerializeField]
         private AtomEventReferenceUsage usage;
 
-        public AtomEventReferenceUsage Usage
+        public virtual AtomEventReferenceUsage Usage
         {
             get => usage;
             set => usage = value;
@@ -87,6 +88,7 @@ namespace UnityAtoms
         /// Event used if `Usage` is set to `Event`.
         /// </summary>
         [SerializeField]
+        [FormerlySerializedAs("_event")]
         private E targetEvent = default(E);
 
         /// <summary>
@@ -105,11 +107,6 @@ namespace UnityAtoms
         {
             get => targetEvent;
             set => targetEvent = value;
-        }
-
-        protected AtomBaseEventReference()
-        {
-            Usage = AtomEventReferenceUsage.Event;
         }
 
         /// <summary>

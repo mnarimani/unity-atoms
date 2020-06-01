@@ -1,6 +1,7 @@
 using System;
 using ShipClient.Instancers;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace UnityAtoms
 {
@@ -15,6 +16,7 @@ namespace UnityAtoms
     /// <typeparam name="E1">Event of type `T`.</typeparam>
     /// <typeparam name="E2">Event of type `IPair&lt;T&gt;`.</typeparam>
     /// <typeparam name="F">Function of type `T => T`.</typeparam>
+    [Serializable]
     public abstract class AtomReference<T, P, C, V, E1, E2, F> : AtomBaseReference,
         IEquatable<AtomReference<T, P, C, V, E1, E2, F>>
         where P : struct, IPair<T>
@@ -98,18 +100,21 @@ namespace UnityAtoms
         ///     Value used if `Usage` is set to `Value`.
         /// </summary>
         [SerializeField]
+        [FormerlySerializedAs("_value")]
         private T value = default(T);
 
         /// <summary>
         ///     Constant used if `Usage` is set to `Constant`.
         /// </summary>
         [SerializeField]
+        [FormerlySerializedAs("_constant")]
         private C constant = default(C);
 
         /// <summary>
         ///     Variable used if `Usage` is set to `Variable`.
         /// </summary>
         [SerializeField]
+        [FormerlySerializedAs("_variable")]
         private V variable = default(V);
 
         /// <summary>

@@ -1,6 +1,7 @@
 using System;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace UnityAtoms
 {
@@ -12,9 +13,7 @@ namespace UnityAtoms
         /// <summary>
         /// A description of the Atom made for documentation purposes.
         /// </summary>
-        [SerializeField]
-        [Multiline]
-        [PropertyOrder(-5)]
+        [SerializeField, Multiline, PropertyOrder(-5), FormerlySerializedAs("_developerDescription")]
         private string developerDescription;
 
         [SerializeField] [PropertyOrder(-4)] private bool requiresInstancing;

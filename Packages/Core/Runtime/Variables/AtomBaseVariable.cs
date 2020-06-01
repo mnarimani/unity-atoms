@@ -1,6 +1,7 @@
 using System;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace UnityAtoms
 {
@@ -39,6 +40,7 @@ namespace UnityAtoms
         [PropertyOrder(1)]
         [Space]
         [SerializeField]
+        [FormerlySerializedAs("_id")]
         private String id = default;
     }
 
@@ -88,6 +90,7 @@ namespace UnityAtoms
         [SerializeField]
         [PropertyOrder(3)]
         [OnValueChanged(nameof(OnInspectorValueChanged))]
+        [FormerlySerializedAs("_value")]
         protected T value;
 
         /// <summary>

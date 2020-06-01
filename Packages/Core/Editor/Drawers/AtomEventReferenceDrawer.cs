@@ -22,7 +22,17 @@ namespace UnityAtoms.Editor.Drawers
 
             CheckInstancing();
 
+            bool isBox = false;
+
+            if (value.Usage == AtomEventReferenceUsage.EventInstancer ||
+                value.Usage == AtomEventReferenceUsage.VariableInstancer)
+            {
+                isBox = true;
+                SirenixEditorGUI.BeginBox();
+            }
+
             EditorGUILayout.BeginHorizontal();
+
             if (label != null)
                 EditorGUILayout.PrefixLabel(label);
 
@@ -36,6 +46,11 @@ namespace UnityAtoms.Editor.Drawers
                 value.Usage == AtomEventReferenceUsage.EventInstancer)
             {
                 DrawInstancer();
+            }
+
+            if (isBox)
+            {
+                SirenixEditorGUI.EndBox();
             }
 
             ValueEntry.SmartValue = value;
@@ -62,7 +77,7 @@ namespace UnityAtoms.Editor.Drawers
                 {
                     if (value.RawEvent.RequiresInstancing == false)
                     {
-                        SirenixEditorGUI.ErrorMessageBox($"Event {value.Variable.name} cannot be instanced.");
+                        SirenixEditorGUI.ErrorMessageBox($"Event {value.RawEvent.name} cannot be instanced.");
                     }
                 }
             }
@@ -114,7 +129,6 @@ namespace UnityAtoms.Editor.Drawers
 
             return field;
         }
-
 
         protected override void SetInstancerForValueEntry(int entryIndex, AtomInstancer instancer)
         {

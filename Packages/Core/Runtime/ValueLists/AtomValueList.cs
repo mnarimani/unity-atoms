@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace UnityAtoms
 {
@@ -25,6 +26,7 @@ namespace UnityAtoms
         /// <returns>The actual `List&lt;T&gt;`.</returns>
         [SerializeField]
         [Space]
+        [FormerlySerializedAs("_list")]
         private List<T> list = new List<T>();
 
         /// <summary>

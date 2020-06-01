@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace UnityAtoms
 {
@@ -105,6 +106,7 @@ namespace UnityAtoms
         /// </summary>
         [SerializeField]
         [PropertyOrder(6)]
+        [FormerlySerializedAs("_changed")]
         [InlineButton(nameof(CreateNestedChangedEvent), "$ChangedEventButtonLabel")]
         private E1 changed;
 
@@ -113,6 +115,7 @@ namespace UnityAtoms
         /// </summary>
         [SerializeField]
         [PropertyOrder(7)]
+        [FormerlySerializedAs("_changedWithHistory")]
         [InlineButton(nameof(CreateNestedChangedWithHistoryEvent), "$ChangedWithHistoryEventButtonLabel")]
         private E2 changedWithHistory;
 

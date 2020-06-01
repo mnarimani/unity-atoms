@@ -6,21 +6,29 @@ namespace UnityAtoms.BaseAtoms
     public enum VoidBaseEventReferenceUsage
     {
         Event,
-        EventInstancer,
-        CollectionClearedEvent,
-        ListClearedEvent,
-        CollectionInstancerClearedEvent,
-        ListInstancerClearedEvent,
+        EventInstancer
     }
 
     /// <summary>
     /// Event Reference of type `Void`. Inherits from `AtomBaseEventReference&lt;Void, VoidEvent, VoidEventInstancer&gt;`.
     /// </summary>
     [Serializable]
-    public sealed class VoidBaseEventReference : AtomBaseEventReference<
-        Void,
-        VoidEvent>, IGetEvent
+    public sealed class VoidBaseEventReference : AtomBaseEventReference<Void, VoidEvent>, IGetEvent
     {
+        [SerializeField] private VoidBaseEventReferenceUsage voidUsage;
+
+        public VoidBaseEventReferenceUsage VoidUsage
+        {
+            get => voidUsage;
+            set => voidUsage = value;
+        }
+
+        public override AtomEventReferenceUsage Usage
+        {
+            get => throw new NotSupportedException("Use VoidUsage property in VoidBaseEventReference");
+            set => throw new NotSupportedException("Use VoidUsage property in VoidBaseEventReference");
+        }
+
         /// <summary>
         /// Get or set the Event used by the Event Reference.
         /// </summary>
@@ -29,28 +37,23 @@ namespace UnityAtoms.BaseAtoms
         {
             get
             {
-                switch ((VoidBaseEventReferenceUsage) Usage)
+                switch (VoidUsage)
                 {
-                    case (VoidBaseEventReferenceUsage.EventInstancer):
+                    case VoidBaseEventReferenceUsage.EventInstancer:
                     {
                         return Instancer.GetInstance(RawEvent);
                     }
-                    case (VoidBaseEventReferenceUsage.Event):
+                    case VoidBaseEventReferenceUsage.Event:
                         return RawEvent;
                     default:
-                        throw new ArgumentOutOfRangeException(nameof(Usage));
+                        throw new ArgumentOutOfRangeException(nameof(VoidUsage));
                 }
             }
             set
             {
-                switch ((VoidBaseEventReferenceUsage) Usage)
+                switch (VoidUsage)
                 {
-                    case (VoidBaseEventReferenceUsage.ListClearedEvent):
-                    {
-                        list.Cleared = value;
-                        break;
-                    }
-                    case (VoidBaseEventReferenceUsage.Event):
+                    case VoidBaseEventReferenceUsage.Event:
                     {
                         RawEvent = value;
                         break;
@@ -60,11 +63,5 @@ namespace UnityAtoms.BaseAtoms
                 }
             }
         }
-
-        /// <summary>
-        /// List used if `Usage` is set to `LIST_CLEARED_EVENT`.
-        /// </summary>
-        [SerializeField]
-        private AtomList list = default(AtomList);
     }
 }

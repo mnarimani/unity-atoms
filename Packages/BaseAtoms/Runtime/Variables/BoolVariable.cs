@@ -11,12 +11,5 @@ namespace UnityAtoms.BaseAtoms
     [CreateAssetMenu(menuName = "Unity Atoms/Variables/Bool", fileName = "BoolVariable")]
     public sealed class BoolVariable : EquatableAtomVariable<bool, BoolPair, BoolEvent, BoolPairEvent, BoolBoolFunction>
     {
-        private void Awake()
-        {
-            BoolVariable v = new BoolVariable();
-            AtomInstancer i = new AtomInstancer();
-
-            BoolVariable boolVariable = i.GetInstance(v);
-        }
     }
 }
