@@ -109,7 +109,7 @@ namespace UnityAtoms
         /// Register a Listener that in turn trigger all its associated handlers when the Event triggers.
         /// </summary>
         /// <param name="listener">The Listener to register.</param>
-        public void AddListener(IAtomListener<T> listener, bool replayEventsBuffer = true)
+        public void AddListener(IAtomListener<T> listener)
         {
             if (!CheckInstancing())
                 return;

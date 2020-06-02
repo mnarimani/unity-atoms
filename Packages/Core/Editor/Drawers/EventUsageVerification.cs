@@ -15,6 +15,7 @@ namespace UnityAtoms.Editor.Drawers
 
             if (typeof(AtomBaseReference).IsAssignableFrom(Property.ParentType) == false &&
                 typeof(AtomBaseEventReference).IsAssignableFrom(Property.ParentType) == false &&
+                typeof(AtomBaseVariable).IsAssignableFrom(Property.ParentType) == false &&
                 isNestedInInstancer == false)
             {
                 if (ValueEntry.SmartValue != null && ValueEntry.SmartValue.RequiresInstancing)

@@ -42,22 +42,37 @@ namespace ShipClient.Instancers
             if (atom is AtomBaseVariable vOriginal && newInstance is AtomBaseVariable vInstance)
             {
                 if (vOriginal.BaseChanged != null)
+                {
                     vInstance.BaseChanged = Instantiate(vOriginal.BaseChanged);
+                    vInstance.BaseChanged.IsInMemoryInstance = true;
+                }
 
                 if (vOriginal.BaseChangedWithHistory != null)
+                {
                     vInstance.BaseChangedWithHistory = Instantiate(vOriginal.BaseChangedWithHistory);
+                    vInstance.BaseChangedWithHistory.IsInMemoryInstance = true;
+                }
             }
 
             if (atom is BaseAtomValueList listOriginal && newInstance is BaseAtomValueList listInstance)
             {
                 if (listOriginal.BaseCleared != null)
+                {
                     listInstance.BaseCleared = Instantiate(listOriginal.BaseCleared);
+                    listInstance.BaseCleared.IsInMemoryInstance = true;
+                }
 
                 if (listOriginal.BaseAdded != null)
+                {
                     listInstance.BaseAdded = Instantiate(listOriginal.BaseAdded);
+                    listInstance.BaseAdded.IsInMemoryInstance = true;
+                }
 
                 if (listOriginal.BaseRemoved != null)
+                {
                     listInstance.BaseRemoved = Instantiate(listOriginal.BaseRemoved);
+                    listInstance.BaseRemoved.IsInMemoryInstance = true;
+                }
             }
 
             newInstance.IsInMemoryInstance = true;

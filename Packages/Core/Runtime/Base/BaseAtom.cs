@@ -13,10 +13,12 @@ namespace UnityAtoms
         /// <summary>
         /// A description of the Atom made for documentation purposes.
         /// </summary>
-        [SerializeField, Multiline, PropertyOrder(-5), FormerlySerializedAs("_developerDescription")]
+        [SerializeField, Multiline, PropertyOrder(-5), HideInInlineEditors]
+        [FormerlySerializedAs("_developerDescription")]
         private string developerDescription;
 
-        [SerializeField] [PropertyOrder(-4)] private bool requiresInstancing;
+        [SerializeField, PropertyOrder(-4), HideInInlineEditors]
+        private bool requiresInstancing;
 
         public bool RequiresInstancing
         {

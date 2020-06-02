@@ -48,13 +48,10 @@ namespace UnityAtoms
         [SerializeField]
         private List<AtomAction> actionResponses = new List<AtomAction>();
 
-        [SerializeField]
-        private bool replayEventBufferOnRegister = true;
-
         private void OnEnable()
         {
             if (Event == null) return;
-            Event.AddListener(this, replayEventBufferOnRegister);
+            Event.AddListener(this);
         }
 
         private void OnDisable()
