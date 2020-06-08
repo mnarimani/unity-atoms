@@ -38,17 +38,16 @@ namespace UnityAtoms
                 {
                     case AtomReferenceUsage.Constant:
                     {
-                        return constant == null ? default(T) : constant.Value;
+                        return constant != null ? constant.Value : default(T);
                     }
                     case AtomReferenceUsage.Variable:
                     {
-                        return variable == null ? default(T) : variable.Value;
+                        return variable != null ? variable.Value : default(T);
                     }
                     case AtomReferenceUsage.VariableInstancer:
                     {
                         if (instancer == null)
                         {
-                            Debug.LogError("Instancer is not assigned.");
                             return default;
                         }
 

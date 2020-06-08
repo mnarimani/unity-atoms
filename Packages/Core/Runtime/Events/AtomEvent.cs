@@ -53,11 +53,11 @@ namespace UnityAtoms
 
             base.Invoke();
 
-            foreach (Action<T> action in OnEvent)
+            for (int i = OnEvent.Count - 1; i >= 0; i--)
             {
                 try
                 {
-                    action?.Invoke(item);
+                    OnEvent[i]?.Invoke(item);
                 }
                 catch (Exception e)
                 {
