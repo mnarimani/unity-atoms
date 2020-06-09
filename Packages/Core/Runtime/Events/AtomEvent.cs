@@ -12,6 +12,9 @@ namespace UnityAtoms
     [EditorIcon("atom-icon-cherry")]
     public class AtomEvent<T> : AtomEventBase
     {
+        [ShowInInspector, LabelText("Number of Listeners: ")]
+        public int Listeners => OnEvent.Count + OnEventNoValue.Count;
+
         public T InspectorRaiseValue
         {
             get
@@ -33,6 +36,7 @@ namespace UnityAtoms
         /// </summary>
         [SerializeField]
         [Tooltip("Value that will be used when using the Raise button in the editor inspector.")]
+        [PropertyOrder(10)]
         private T inspectorRaiseValue;
 
         /// <summary>
@@ -68,6 +72,7 @@ namespace UnityAtoms
 
         [Button("Raise")]
         [DisableInEditorMode]
+        [PropertyOrder(20)]
         private void RaiseEditor() => Invoke(inspectorRaiseValue);
 
         /// <summary>
