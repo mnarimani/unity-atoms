@@ -24,6 +24,9 @@ namespace ShipClient.Instancers
 
         public T GetInstance<T>(T atom) where T : BaseAtom
         {
+            if (atom == null)
+                return null;
+
             if (atom.RequiresInstancing == false)
             {
                 if (Application.isPlaying)

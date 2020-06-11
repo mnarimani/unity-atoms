@@ -25,7 +25,7 @@ namespace UnityAtoms
     {
         protected override bool ValueEquals({VALUE_TYPE} other)
         {
-            throw new NotImplementedException();
+            return ReferenceEquals(Value, other);
         }
     }
 <%ENDIF%>
