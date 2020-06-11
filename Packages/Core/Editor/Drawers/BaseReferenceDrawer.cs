@@ -42,6 +42,8 @@ namespace UnityAtoms.Editor.Drawers
                         continue;
 
                     SetInstancerForValueEntry(i, target.GetComponentInParent<AtomInstancer>());
+                    EditorUtility.SetDirty(target);
+                    EditorUtility.SetDirty(target.gameObject);
                 }
             }
 
