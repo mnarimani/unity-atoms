@@ -22,7 +22,7 @@ namespace UnityAtoms.Editor.Drawers
                 typeof(AtomBaseEventReference).IsAssignableFrom(Property.ParentType) == false &&
                 isNestedInInstancer == false)
             {
-                if(ValueEntry.SmartValue != null && ValueEntry.SmartValue.RequiresInstancing)
+                if(ValueEntry.SmartValue != null && ValueEntry.SmartValue.RequiresInstancing && label.text.EndsWith("Variable") == false)
                 {
                     SirenixEditorGUI.ErrorMessageBox(
                         $"Variable {ValueEntry.SmartValue.name} should be used with AtomInstancer. Use Reference classes instead of raw Event to declare your field. And set the usage to 'Variable Instancer'");
