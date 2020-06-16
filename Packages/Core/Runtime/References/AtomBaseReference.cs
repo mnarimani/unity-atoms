@@ -32,6 +32,6 @@ namespace UnityAtoms
         /// Describes how we use the Reference and where the value comes from.
         /// </summary>
         [SerializeField, EnumPaging]
-        private AtomReferenceUsage usage;
+        private AtomReferenceUsage usage = AtomReferenceUsage.Variable;
     }
 }

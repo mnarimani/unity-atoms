@@ -41,7 +41,11 @@ namespace UnityAtoms.Editor.Drawers
                     if (target == null)
                         continue;
 
-                    SetInstancerForValueEntry(i, target.GetComponentInParent<AtomInstancer>());
+                    var atomInstancer = target.GetComponentInParent<AtomInstancer>();
+                    if (atomInstancer == null)
+                        atomInstancer = target.GetComponent<AtomInstancer>();
+
+                    SetInstancerForValueEntry(i, atomInstancer);
                     EditorUtility.SetDirty(target);
                     EditorUtility.SetDirty(target.gameObject);
                 }
