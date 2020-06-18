@@ -10,9 +10,9 @@ namespace UnityAtoms
     /// </summary>
     public enum AtomReferenceUsage
     {
-        Value,
-        Variable,
-        VariableInstancer,
+        Value = 0,
+        Variable = 2,
+        VariableInstancer = 3,
     }
 
     /// <summary>

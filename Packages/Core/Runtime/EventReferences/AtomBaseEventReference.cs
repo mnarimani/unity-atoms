@@ -10,10 +10,10 @@ namespace UnityAtoms
     /// </summary>
     public enum AtomEventReferenceUsage
     {
-        Event,
-        EventInstancer,
-        Variable,
-        VariableInstancer,
+        Event = 0,
+        EventInstancer = 1,
+        Variable = 2,
+        VariableInstancer = 3,
     }
 
     /// <summary>

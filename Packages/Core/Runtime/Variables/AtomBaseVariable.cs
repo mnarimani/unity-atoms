@@ -35,8 +35,6 @@ namespace UnityAtoms
 
         internal abstract AtomEventBase BaseChanged { get; set; }
 
-        internal abstract AtomEventBase BaseChangedWithHistory { get; set; }
-
         [PropertyOrder(1)]
         [Space]
         [SerializeField]
@@ -62,12 +60,6 @@ namespace UnityAtoms
         }
 
         internal override AtomEventBase BaseChanged
-        {
-            get => throw new NotImplementedException();
-            set => throw new NotImplementedException();
-        }
-
-        internal override AtomEventBase BaseChangedWithHistory
         {
             get => throw new NotImplementedException();
             set => throw new NotImplementedException();

@@ -7,9 +7,8 @@ using UnityEngine;
 
 namespace UnityAtoms.Editor.Drawers
 {
-    public class AtomVariableReferenceDrawer<Target, T, P, C, V, E1, E2, F> : BaseReferenceDrawer<Target>
+    public class AtomVariableReferenceDrawer<Target, T, V, E1> : BaseReferenceDrawer<Target>
         where Target : AtomReference<T, V, E1>
-        where C : AtomBaseVariable<T>
         where V : AtomVariable<T, E1>
         where E1 : AtomEvent<T>
     {

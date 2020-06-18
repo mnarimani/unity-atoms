@@ -49,12 +49,6 @@ namespace ShipClient.Instancers
                     vInstance.BaseChanged = Instantiate(vOriginal.BaseChanged);
                     vInstance.BaseChanged.IsInMemoryInstance = true;
                 }
-
-                if (vOriginal.BaseChangedWithHistory != null)
-                {
-                    vInstance.BaseChangedWithHistory = Instantiate(vOriginal.BaseChangedWithHistory);
-                    vInstance.BaseChangedWithHistory.IsInMemoryInstance = true;
-                }
             }
 
             if (atom is BaseAtomValueList listOriginal && newInstance is BaseAtomValueList listInstance)

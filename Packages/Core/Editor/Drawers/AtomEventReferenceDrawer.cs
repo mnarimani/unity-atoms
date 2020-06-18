@@ -38,7 +38,7 @@ namespace UnityAtoms.Editor.Drawers
 
             value.Usage = (AtomEventReferenceUsage) EditorGUILayout.EnumPopup(value.Usage, GUILayout.Width(20));
 
-            field.Draw(null);
+            field?.Draw(null);
 
             EditorGUILayout.EndHorizontal();
 

@@ -8,16 +8,16 @@ namespace UnityAtoms.BaseAtoms
     /// </summary>
     public enum AtomBaseVariableEventReferenceUsage
     {
-        Event,
-        EventInstancer,
-        CollectionAddedEvent,
-        CollectionRemovedEvent,
-        ListAddedEvent,
-        ListRemovedEvent,
-        CollectionInstancerAddedEvent,
-        CollectionInstancerRemovedEvent,
-        ListInstancerAddedEvent,
-        ListInstancerRemovedEvent,
+        Event = 0,
+        EventInstancer = 1,
+        CollectionAddedEvent = 2,
+        CollectionRemovedEvent = 3,
+        ListAddedEvent = 4,
+        ListRemovedEvent = 5,
+        CollectionInstancerAddedEvent = 6,
+        CollectionInstancerRemovedEvent = 7,
+        ListInstancerAddedEvent = 8,
+        ListInstancerRemovedEvent = 9,
     }
 
     /// <summary>
