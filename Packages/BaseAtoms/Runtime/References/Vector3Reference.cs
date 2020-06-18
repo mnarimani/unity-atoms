@@ -10,12 +10,8 @@ namespace UnityAtoms.BaseAtoms
     [Serializable]
     public sealed class Vector3Reference : EquatableAtomReference<
         Vector3,
-        Vector3Pair,
-        Vector3Constant,
         Vector3Variable,
-        Vector3Event,
-        Vector3PairEvent,
-        Vector3Vector3Function>, IEquatable<Vector3Reference>
+        Vector3Event>, IEquatable<Vector3Reference>
     {
         public Vector3Reference() : base() { }
         public Vector3Reference(Vector3 value) : base(value) { }

@@ -10,12 +10,8 @@ namespace UnityAtoms.BaseAtoms
     [Serializable]
     public sealed class Collider2DReference : AtomReference<
         Collider2D,
-        Collider2DPair,
-        Collider2DConstant,
         Collider2DVariable,
-        Collider2DEvent,
-        Collider2DPairEvent,
-        Collider2DCollider2DFunction>, IEquatable<Collider2DReference>
+        Collider2DEvent>, IEquatable<Collider2DReference>
     {
         public Collider2DReference() : base() { }
         public Collider2DReference(Collider2D value) : base(value) { }

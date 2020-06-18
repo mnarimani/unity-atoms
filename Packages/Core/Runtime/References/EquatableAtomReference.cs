@@ -12,14 +12,10 @@ namespace UnityAtoms
     /// <typeparam name="E1">Event of type `T`.</typeparam>
     /// <typeparam name="E2">Event of type `IPair&lt;T&gt;`.</typeparam>
     /// <typeparam name="F">Function of type `T => T`.</typeparam>
-    public abstract class EquatableAtomReference<T, P, C, V, E1, E2, F> : AtomReference<T, P, C, V, E1, E2, F>,
-        IEquatable<EquatableAtomReference<T, P, C, V, E1, E2, F>>
-        where P : struct, IPair<T>
-        where C : AtomBaseVariable<T>
-        where V : AtomVariable<T, P, E1, E2, F>
+    public abstract class EquatableAtomReference<T, V, E1> : AtomReference<T, V, E1>,
+        IEquatable<EquatableAtomReference<T, V, E1>>
+        where V : AtomVariable<T ,E1>
         where E1 : AtomEvent<T>
-        where E2 : AtomEvent<P>
-        where F : AtomFunction<T, T>
     {
         public EquatableAtomReference() : base()
         {
@@ -29,7 +25,7 @@ namespace UnityAtoms
         {
         }
 
-        public bool Equals(EquatableAtomReference<T, P, C, V, E1, E2, F> other)
+        public bool Equals(EquatableAtomReference<T, V, E1> other)
         {
             return base.Equals(other);
         }

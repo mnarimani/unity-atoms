@@ -8,13 +8,10 @@ using UnityEngine;
 namespace UnityAtoms.Editor.Drawers
 {
     public class AtomVariableReferenceDrawer<Target, T, P, C, V, E1, E2, F> : BaseReferenceDrawer<Target>
-        where Target : AtomReference<T, P, C, V, E1, E2, F>
-        where P : struct, IPair<T>
+        where Target : AtomReference<T, V, E1>
         where C : AtomBaseVariable<T>
-        where V : AtomVariable<T, P, E1, E2, F>
+        where V : AtomVariable<T, E1>
         where E1 : AtomEvent<T>
-        where E2 : AtomEvent<P>
-        where F : AtomFunction<T, T>
     {
         private GUIStyle popupStyle;
 
@@ -100,9 +97,6 @@ namespace UnityAtoms.Editor.Drawers
             {
                 case AtomReferenceUsage.Value:
                     field = Property.FindChild(x => x.Name == "value", false);
-                    break;
-                case AtomReferenceUsage.Constant:
-                    field = Property.FindChild(x => x.Name == "constant", false);
                     break;
                 case AtomReferenceUsage.Variable:
                     field = Property.FindChild(x => x.Name == "variable", false);

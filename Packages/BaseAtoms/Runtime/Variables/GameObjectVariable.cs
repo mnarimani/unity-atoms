@@ -4,11 +4,11 @@ using UnityEngine;
 namespace UnityAtoms.BaseAtoms
 {
     /// <summary>
-    /// Variable of type `GameObject`. Inherits from `AtomVariable&lt;GameObject, GameObjectPair, GameObjectEvent, GameObjectPairEvent, GameObjectGameObjectFunction&gt;`.
+    /// Variable of type `GameObject`. Inherits from `AtomVariable&lt;GameObject, GameObjectEvent, GameObjectPairEvent, GameObjectGameObjectFunction&gt;`.
     /// </summary>
     [EditorIcon("atom-icon-lush")]
     [CreateAssetMenu(menuName = "Unity Atoms/Variables/GameObject", fileName = "GameObjectVariable")]
-    public sealed class GameObjectVariable : AtomVariable<GameObject, GameObjectPair, GameObjectEvent, GameObjectPairEvent, GameObjectGameObjectFunction>
+    public sealed class GameObjectVariable : AtomVariable<GameObject, GameObjectEvent>
     {
         protected override bool ValueEquals(GameObject other)
         {

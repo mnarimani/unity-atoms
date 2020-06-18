@@ -30,9 +30,9 @@ namespace UnityAtoms.Editor
             window.Show();
         }
 
-        private string valueType = "";
-        private bool isValueTypeEquatable = true;
         private string valueTypeNamespace = "";
+        private string valueType = "";
+        private bool isValueTypeEquatable = false;
         private string subUnityAtomsNamespace = "";
 
         private List<AtomType> atomTypesToGenerate = new List<AtomType>(AtomTypes.ALL_ATOM_TYPES);
@@ -196,10 +196,9 @@ namespace UnityAtoms.Editor
 
                 atomTypesToGenerate.ForEach((atomType) =>
                 {
-                    templateVariables["VALUE_TYPE_NAME"] = atomType.IsValuePair ? $"{capitalizedValueType}Pair" : capitalizedValueType;
-                    var vType = atomType.IsValuePair ? $"{capitalizedValueType}Pair" : valueType;
-                    templateVariables["VALUE_TYPE"] = vType;
-                    Generator.Generate(new AtomReceipe(atomType, vType), baseWritePath, templates, templateConditions, templateVariables);
+                    templateVariables["VALUE_TYPE_NAME"] = capitalizedValueType;
+                    templateVariables["VALUE_TYPE"] = valueType;
+                    Generator.Generate(new AtomReceipe(atomType, valueType), baseWritePath, templates, templateConditions, templateVariables);
                 });
 
                 AssetDatabase.Refresh();

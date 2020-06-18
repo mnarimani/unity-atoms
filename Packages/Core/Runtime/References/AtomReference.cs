@@ -17,14 +17,10 @@ namespace UnityAtoms
     /// <typeparam name="E2">Event of type `IPair&lt;T&gt;`.</typeparam>
     /// <typeparam name="F">Function of type `T => T`.</typeparam>
     [Serializable]
-    public abstract class AtomReference<T, P, C, V, E1, E2, F> : AtomBaseReference,
-        IEquatable<AtomReference<T, P, C, V, E1, E2, F>>
-        where P : struct, IPair<T>
-        where C : AtomBaseVariable<T>
-        where V : AtomVariable<T, P, E1, E2, F>
+    public abstract class AtomReference<T, V, E1> : AtomBaseReference,
+        IEquatable<AtomReference<T, V, E1>>
+        where V : AtomVariable<T, E1>
         where E1 : AtomEvent<T>
-        where E2 : AtomEvent<P>
-        where F : AtomFunction<T, T>
     {
         /// <summary>
         ///     Get or set the value for the Reference.
@@ -36,10 +32,6 @@ namespace UnityAtoms
             {
                 switch (Usage)
                 {
-                    case AtomReferenceUsage.Constant:
-                    {
-                        return constant != null ? constant.Value : default(T);
-                    }
                     case AtomReferenceUsage.Variable:
                     {
                         return variable != null ? variable.Value : default(T);
@@ -86,9 +78,6 @@ namespace UnityAtoms
                         instancedVariable.Value = value;
                         break;
                     }
-                    case AtomReferenceUsage.Constant:
-                        Debug.LogError("Can't reassign constant value");
-                        break;
                     default:
                         throw new ArgumentOutOfRangeException(nameof(Usage));
                 }
@@ -103,13 +92,6 @@ namespace UnityAtoms
         private T value = default(T);
 
         /// <summary>
-        ///     Constant used if `Usage` is set to `Constant`.
-        /// </summary>
-        [SerializeField]
-        [FormerlySerializedAs("_constant")]
-        private C constant = default(C);
-
-        /// <summary>
         ///     Variable used if `Usage` is set to `Variable`.
         /// </summary>
         [SerializeField]
@@ -121,12 +103,6 @@ namespace UnityAtoms
         /// </summary>
         [SerializeField]
         private AtomInstancer instancer = default(AtomInstancer);
-
-        public C Constant
-        {
-            get => constant;
-            set => constant = value;
-        }
 
         public V Variable
         {
@@ -153,7 +129,7 @@ namespace UnityAtoms
 
         protected abstract bool ValueEquals(T other);
 
-        public bool Equals(AtomReference<T, P, C, V, E1, E2, F> other)
+        public bool Equals(AtomReference<T, V, E1> other)
         {
             if (other == null)
                 return false;

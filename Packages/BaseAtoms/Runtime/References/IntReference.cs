@@ -9,12 +9,8 @@ namespace UnityAtoms.BaseAtoms
     [Serializable]
     public sealed class IntReference : EquatableAtomReference<
         int,
-        IntPair,
-        IntConstant,
         IntVariable,
-        IntEvent,
-        IntPairEvent,
-        IntIntFunction>, IEquatable<IntReference>
+        IntEvent>, IEquatable<IntReference>
     {
         public IntReference() : base() { }
         public IntReference(int value) : base(value) { }

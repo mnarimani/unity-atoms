@@ -9,12 +9,8 @@ namespace UnityAtoms.BaseAtoms
     [Serializable]
     public sealed class StringReference : EquatableAtomReference<
         string,
-        StringPair,
-        StringConstant,
         StringVariable,
-        StringEvent,
-        StringPairEvent,
-        StringStringFunction>, IEquatable<StringReference>
+        StringEvent>, IEquatable<StringReference>
     {
         public StringReference() : base() { }
         public StringReference(string value) : base(value) { }

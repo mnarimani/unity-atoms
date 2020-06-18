@@ -11,7 +11,6 @@ namespace UnityAtoms
     public enum AtomReferenceUsage
     {
         Value,
-        Constant,
         Variable,
         VariableInstancer,
     }

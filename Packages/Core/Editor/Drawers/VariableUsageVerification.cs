@@ -1,5 +1,4 @@
-﻿using System;
-using ShipClient.Instancers;
+﻿using ShipClient.Instancers;
 using Sirenix.OdinInspector.Editor;
 using Sirenix.Utilities.Editor;
 using UnityEngine;
@@ -8,11 +7,8 @@ namespace UnityAtoms.Editor.Drawers
 {
     [DrawerPriority(1)]
     public class VariableUsageVerification<T1, T2, T3, T4, T5, T6> : OdinValueDrawer<T1>
-        where T1 : AtomVariable<T2, T3, T4, T5, T6>
-        where T3 : struct, IPair<T2>
+        where T1 : AtomVariable<T2, T4>
         where T4 : AtomEvent<T2>
-        where T5 : AtomEvent<T3>
-        where T6 : AtomFunction<T2, T2>
     {
         protected override void DrawPropertyLayout(GUIContent label)
         {

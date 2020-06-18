@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -28,6 +29,8 @@ namespace UnityAtoms
         where E : AtomEvent<T>
         where UER : UnityEvent<T>
     {
+        [SerializeField, PropertyOrder(100), BoxGroup("Debug")] private T inspectorRaiseValue;
+
         /// <summary>
         /// The Event we are listening for as a property.
         /// </summary>
@@ -39,14 +42,6 @@ namespace UnityAtoms
         /// NOTE: This variable is public due to this bug: https://issuetracker.unity3d.com/issues/events-generated-by-the-player-input-component-do-not-have-callbackcontext-set-as-their-parameter-type. Will be changed back to private when fixed (this could happen in a none major update).
         /// </summary>
         public UER unityEventResponse = null;
-
-        /// <summary>
-        /// The Action responses;
-        /// </summary>
-        /// <typeparam name="A">The Action type.</typeparam>
-        /// <returns>A `List&lt;A&gt;` of Actions.</returns>
-        [SerializeField]
-        private List<AtomAction> actionResponses = new List<AtomAction>();
 
         private void OnEnable()
         {
@@ -67,29 +62,12 @@ namespace UnityAtoms
         public void OnEventRaised(T item)
         {
             unityEventResponse?.Invoke(item);
-            for (int i = 0; actionResponses != null && i < actionResponses.Count; ++i)
-            {
-                var action = actionResponses[i];
-
-                if (action == null) continue;
-
-                if (action is AtomAction<T> actionWithParam)
-                {
-                    actionWithParam.Do(item);
-                }
-                else
-                {
-                    action.Do();
-                }
-            }
         }
 
-        /// <summary>
-        /// Helper to register as listener callback
-        /// </summary>
-        public void DebugLog(T item)
+        [Button, PropertyOrder(101), BoxGroup("Debug")]
+        private void Raise()
         {
-            Debug.Log(item.ToString());
+            unityEventResponse.Invoke(inspectorRaiseValue);
         }
     }
 }

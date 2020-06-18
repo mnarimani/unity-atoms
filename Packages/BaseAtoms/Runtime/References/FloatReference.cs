@@ -9,12 +9,8 @@ namespace UnityAtoms.BaseAtoms
     [Serializable]
     public sealed class FloatReference : EquatableAtomReference<
         float,
-        FloatPair,
-        FloatConstant,
         FloatVariable,
-        FloatEvent,
-        FloatPairEvent,
-        FloatFloatFunction>, IEquatable<FloatReference>
+        FloatEvent>, IEquatable<FloatReference>
     {
         public FloatReference() : base() { }
         public FloatReference(float value) : base(value) { }

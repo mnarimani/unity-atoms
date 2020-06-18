@@ -85,7 +85,7 @@ namespace UnityAtoms.Editor
                     valueType: "AtomBaseVariable",
                     baseWritePath: Path.Combine(path, "BaseAtoms"),
                     isValueEquatable: false,
-                    atomTypesToGenerate: new List<AtomType>() { AtomTypes.EVENT, AtomTypes.ACTION, AtomTypes.UNITY_EVENT, AtomTypes.BASE_EVENT_REFERENCE, AtomTypes.BASE_EVENT_REFERENCE_LISTENER },
+                    atomTypesToGenerate: new List<AtomType>() { AtomTypes.EVENT, AtomTypes.UNITY_EVENT, AtomTypes.BASE_EVENT_REFERENCE, AtomTypes.BASE_EVENT_REFERENCE_LISTENER },
                     typeNamespace: "",
                     subUnityAtomsNamespace: "BaseAtoms"
                 ),
@@ -97,7 +97,7 @@ namespace UnityAtoms.Editor
                     valueType: "FSMTransitionData",
                     baseWritePath: Path.Combine(path, "FSM"),
                     isValueEquatable: false,
-                    atomTypesToGenerate: new List<AtomType>() { AtomTypes.EVENT, AtomTypes.ACTION, AtomTypes.UNITY_EVENT, AtomTypes.BASE_EVENT_REFERENCE, AtomTypes.BASE_EVENT_REFERENCE_LISTENER },
+                    atomTypesToGenerate: new List<AtomType>() { AtomTypes.EVENT, AtomTypes.UNITY_EVENT, AtomTypes.BASE_EVENT_REFERENCE, AtomTypes.BASE_EVENT_REFERENCE_LISTENER },
                     typeNamespace: "",
                     subUnityAtomsNamespace: "FSM"
                 ),
@@ -114,10 +114,9 @@ namespace UnityAtoms.Editor
                 var atomTypesToGenerate = item.AtomTypesToGenerate;
                 foreach (var atomType in atomTypesToGenerate)
                 {
-                    templateVariables["VALUE_TYPE_NAME"] = atomType.IsValuePair ? $"{capitalizedValueType}Pair" : capitalizedValueType;
-                    var valueType = atomType.IsValuePair ? $"{capitalizedValueType}Pair" : item.ValueType;
-                    templateVariables["VALUE_TYPE"] = valueType;
-                    Generator.Generate(new AtomReceipe(atomType, valueType), item.BaseWritePath, templates, templateConditions, templateVariables);
+                    templateVariables["VALUE_TYPE_NAME"] = capitalizedValueType;
+                    templateVariables["VALUE_TYPE"] = item.ValueType;
+                    Generator.Generate(new AtomReceipe(atomType, item.ValueType), item.BaseWritePath, templates, templateConditions, templateVariables);
                 }
             }
             AssetDatabase.Refresh();

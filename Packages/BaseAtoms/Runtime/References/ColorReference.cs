@@ -10,12 +10,8 @@ namespace UnityAtoms.BaseAtoms
     [Serializable]
     public sealed class ColorReference : EquatableAtomReference<
         Color,
-        ColorPair,
-        ColorConstant,
         ColorVariable,
-        ColorEvent,
-        ColorPairEvent,
-        ColorColorFunction>, IEquatable<ColorReference>
+        ColorEvent>, IEquatable<ColorReference>
     {
         public ColorReference() : base() { }
         public ColorReference(Color value) : base(value) { }

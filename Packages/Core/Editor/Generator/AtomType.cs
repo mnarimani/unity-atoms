@@ -17,7 +17,6 @@ namespace UnityAtoms.Editor
         public string RelativeDrawerFileNameAndPath { get; set; }
         public string EditorTemplateName { get; set; }
         public string RelativeEditorFileNameAndPath { get; set; }
-        public bool IsValuePair { get; set; }
 
         private static string CreateRelativeFilePath(string atomName) => Path.Combine(Runtime.IsUnityAtomsRepo ? "Runtime" : "", $"{atomName}s", $"{{VALUE_TYPE_NAME}}{atomName}.cs");
         private static string CreateRelativeDrawerPath(string atomName) => Path.Combine("Editor", Runtime.IsUnityAtomsRepo ? "Drawers" : "AtomDrawers", $"{atomName}s", $"{{VALUE_TYPE_NAME}}{atomName}Drawer.cs");
@@ -42,7 +41,6 @@ namespace UnityAtoms.Editor
             this.RelativeDrawerFileNameAndPath = string.IsNullOrEmpty(relativeDrawerFileNameAndPath) ? CreateRelativeDrawerPath(this.Name) : relativeDrawerFileNameAndPath;
             this.EditorTemplateName = editorTemplateName;
             this.RelativeEditorFileNameAndPath = string.IsNullOrEmpty(relativeEditorFileNameAndPath) ? CreateEditorDrawerPath(this.Name) : relativeEditorFileNameAndPath;
-            this.IsValuePair = this.DisplayName != "Pair" && this.DisplayName.Contains("Pair");
         }
 
         public bool HasDrawerTemplate => !string.IsNullOrWhiteSpace(DrawerTemplateName);
@@ -50,7 +48,7 @@ namespace UnityAtoms.Editor
 
         public bool Equals(AtomType other)
         {
-            return this.Name == other.Name && this.IsValuePair == other.IsValuePair;
+            return this.Name == other.Name;
         }
 
         public override bool Equals(object obj)
@@ -62,7 +60,6 @@ namespace UnityAtoms.Editor
         {
             var hash = 17;
             hash = hash * 23 + this.Name.GetHashCode();
-            hash = hash * 23 + this.IsValuePair.GetHashCode();
             return hash;
         }
     }

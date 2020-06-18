@@ -10,12 +10,8 @@ namespace UnityAtoms.BaseAtoms
     [Serializable]
     public sealed class GameObjectReference : AtomReference<
         GameObject,
-        GameObjectPair,
-        GameObjectConstant,
         GameObjectVariable,
-        GameObjectEvent,
-        GameObjectPairEvent,
-        GameObjectGameObjectFunction>, IEquatable<GameObjectReference>
+        GameObjectEvent>, IEquatable<GameObjectReference>
     {
         public GameObjectReference() : base() { }
         public GameObjectReference(GameObject value) : base(value) { }
